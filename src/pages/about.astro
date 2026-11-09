@@ -6,17 +6,11 @@ import CtaCard from "../components/CtaCard.astro";
 import { site } from "../site";
 
 import founder from "../assets/people/founder.jpg";
-import reel from "../assets/3d/reel.png";
-import tea from "../assets/3d/tea.png";
-import jester from "../assets/3d/jester.png";
-import bulb from "../assets/3d/bulb.png";
-
 // From the PRD's design principles.
 const values = [
-  { img: tea, title: "Effortless by default", body: "Every tap should feel quick and obvious. You should never feel stuck or kept waiting." },
-  { img: jester, title: "Playful and rewarding", body: "Choosing a movie should feel like a game, not homework." },
-  { img: reel, title: "Made for movie night", body: "Dark, calm and posters first, because you're usually on the couch with the lights down." },
-  { img: bulb, title: "One decision at a time", body: "One great pick beats a wall of fifty. Cini shows you one title, and you decide." },
+  { title: "Effortless by default", body: "Every tap should feel quick and obvious. You should never feel stuck or kept waiting." },
+  { title: "Playful and rewarding", body: "Choosing a movie should feel like a game, not homework." },
+  { title: "One decision at a time", body: "One great pick beats a wall of fifty. Cini shows you one title, and you decide." },
 ];
 ---
 
@@ -61,7 +55,6 @@ const values = [
         {
           values.map((v) => (
             <article class="value" data-reveal data-tilt>
-              <Image src={v.img} alt="" width={160} class="value__img" />
               <h3>{v.title}</h3>
               <p>{v.body}</p>
             </article>
@@ -81,7 +74,7 @@ const values = [
         <div class="founder__note">
           <p class="eyebrow">A note from the founder</p>
           <p class="founder__quote">
-            I love movies. I hate choosing one. After one too many nights lost to scrolling, I started building the app I wanted: one
+            I love movies. I don't love choosing one. After one too many nights lost to scrolling, I started building the app I wanted: one
             that gets what I'm in the mood for and just tells me what to watch.
           </p>
           <p>
@@ -151,7 +144,7 @@ const values = [
 
   .values__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 18px;
   }
 
@@ -163,13 +156,6 @@ const values = [
     border-radius: var(--radius-l);
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
     box-shadow: var(--card-shadow);
-  }
-
-  .value__img {
-    width: 80px;
-    height: auto;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
   }
 
   .value h3 {
@@ -274,12 +260,6 @@ const values = [
   .touch__sub {
     color: var(--text-2);
     font-size: 15px;
-  }
-
-  @media (max-width: 1000px) {
-    .values__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
   @media (max-width: 760px) {
