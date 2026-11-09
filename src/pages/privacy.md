@@ -12,6 +12,7 @@ summary: "<strong>The short version:</strong> Cini uses what you tell it and wha
   user_preference_vector, streaming_routes, created_time, last_active_time),
   title_lists, recommendation_signals, activity; Firebase Auth/Firestore/Functions/Messaging;
   Typesense search; TMDB images. No analytics, ads or tracking SDKs.
+  2026-11-09: support inbox (support_requests in Firestore, sorted by Gemini, tracked in the "Cini Support" Google Sheet).
 -->
 
 ## Who we are
@@ -31,7 +32,7 @@ If you have a question about this policy or your data, email [hello@ciniapp.com]
 | Profile | Username and date of birth | To set up your profile and confirm you're old enough to use Cini |
 | Taste and preferences | Titles you've seen, your streaming services, favorite genres, and the kinds of stories you like | To personalize your picks |
 | Activity in the app | Moods you pick, titles you save, mark as seen, skip, rate or share, and searches you run | To recommend titles and improve your picks over time |
-| Messages to us | Anything you send to hello@ciniapp.com | To answer you |
+| Messages to us | Anything you send to hello@ciniapp.com or through the message form on ciniapp.com, and the email address you give us. If you message us from the app, we also receive your app version, device model, iOS version and the screen you were on. | To answer you and fix problems |
 | Waitlist sign-ups | Your email, if you join the waitlist on ciniapp.com | To tell you when Cini launches |
 
 ### Information created as you use Cini
@@ -67,6 +68,7 @@ We share your information only as described here.
 - **Service providers who run Cini for us.** They may use your information only to provide their service to us.
   - **Google Firebase and Google Cloud** host your account, store your data, run our backend and recommendation service, send sign-up text codes and deliver notifications.
   - **Typesense** powers search. It receives what you type into search.
+  - **Google's Gemini AI** reads support messages to sort them by topic and urgency and to draft a reply, so the most urgent ones get answered first. A person reads and answers every message. We keep and track support messages in **Google Workspace** (Sheets and Gmail).
 - **Apple and Google**, when you sign in with them. Their own privacy policies apply to that sign-in.
 - **TMDB**, which hosts the posters and images you see in the app. Your device loads them from TMDB's servers, so TMDB sees your IP address.
 - **People you choose to share with.** When you share a title, it goes to whoever you send it to.
@@ -78,6 +80,8 @@ The service that picks your recommendations receives your moods and your taste p
 ## How long we keep it
 
 We keep your information while you have an account. When you delete your account, we delete your information within 30 days. Copies in backups are overwritten on a rolling basis, and we may keep a limited amount for longer when the law requires it or to prevent fraud.
+
+Support messages are kept for up to two years so we can follow up on problems, then deleted.
 
 Waitlist emails are kept until Cini launches and we've emailed you, or until you ask us to remove yours.
 

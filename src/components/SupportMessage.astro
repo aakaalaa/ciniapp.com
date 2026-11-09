@@ -1,0 +1,271 @@
+---
+// "Message us": one box and an email address, nothing else to fill in. Posts to the submitSupportMessage cloud function,
+// which files the message and has it sorted by AI for the owner. Until site.supportEndpoint is set, Send opens the visitor's
+// email app with the message already written, so nothing is ever lost.
+import { site } from "../site";
+---
+
+<form class="sm" data-support-message data-endpoint={site.supportEndpoint} data-email={site.email} novalidate>
+  <label class="sm__label" for="sm-message">What's going on?</label>
+  <textarea
+    id="sm-message"
+    name="message"
+    rows="5"
+    maxlength="4000"
+    placeholder="Ask anything or tell us what happened. A sentence or two is plenty."
+    required></textarea>
+
+  <div class="sm__row">
+    <label class="sm__email">
+      <span class="sr-only">Your email, so we can reply</span>
+      <input type="email" name="email" placeholder="Your email, so we can reply" autocomplete="email" required />
+    </label>
+    <!-- Honeypot: people never see this, bots fill it in. -->
+    <input class="sm__hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <button class="btn sm__btn" type="submit" data-cursor="link">
+      <span class="sm__text">Send</span>
+      <span class="sm__spin" aria-hidden="true"></span>
+      <svg class="sm__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    </button>
+  </div>
+  <p class="sm__msg" role="status" aria-live="polite"></p>
+  <p class="sm__from" hidden></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-support-message]").forEach((form) => {
+    const text = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]')!;
+    const email = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const hp = form.querySelector<HTMLInputElement>('input[name="website"]')!;
+    const btn = form.querySelector<HTMLButtonElement>("button")!;
+    const msg = form.querySelector<HTMLElement>(".sm__msg")!;
+    const endpoint = form.dataset.endpoint || "";
+    const supportEmail = form.dataset.email || "hello@ciniapp.com";
+    let busy = false;
+
+    // The app's Help link opens this page as /support?from=app&app=1.0.3&os=iOS+26.1&device=iPhone16,1&screen=settings
+    // so messages arrive with the app details. No name, email or account id ever goes in the link.
+    const q = new URLSearchParams(location.search);
+    const clean = (v: string | null) => (v || "").replace(/[^\w .,()+-]/g, "").trim().slice(0, 40);
+    const app =
+      q.get("from") === "app"
+        ? { app_version: clean(q.get("app")), os_version: clean(q.get("os")), device_model: clean(q.get("device")), screen: clean(q.get("screen")) }
+        : null;
+    if (app) {
+      const from = form.querySelector<HTMLElement>(".sm__from")!;
+      from.textContent = `Sending from the Cini app${app.app_version ? `, version ${app.app_version}` : ""}. Your app version and device are included so we can help faster.`;
+      from.hidden = false;
+    }
+    const appLine = () =>
+      app ? `\n\n—\nCini app ${app.app_version} · ${app.os_version} · ${app.device_model} · ${app.screen}`.replace(/( · )+$/, "") : "";
+
+    const set = (state: "" | "loading" | "done" | "error", html = "") => {
+      form.dataset.state = state;
+      btn.disabled = state === "loading" || state === "done";
+      msg.innerHTML = html;
+    };
+    const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+    const mailto = () =>
+      `mailto:${supportEmail}?subject=${encodeURIComponent("Cini support")}&body=${encodeURIComponent(text.value.trim() + appLine())}`;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      if (text.value.trim().length < 5) {
+        set("error", "Tell us a little more first.");
+        text.focus();
+        return;
+      }
+      if (!email.value || !email.checkValidity()) {
+        set("error", "That email doesn't look right.");
+        email.focus();
+        return;
+      }
+      if (!endpoint) {
+        // Not switched on yet: hand the message to the visitor's email app instead.
+        location.href = mailto();
+        set("done", `Your email app should open with your message. If it doesn't, write to <a href="mailto:${supportEmail}">${supportEmail}</a>.`);
+        return;
+      }
+      busy = true;
+      set("loading");
+      try {
+        // text/plain keeps this a simple request, so the browser sends it straight away with no preflight.
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            message: text.value.trim(),
+            email: email.value.trim(),
+            page: location.pathname,
+            website: hp.value,
+            ...(app ? { app } : {}),
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 429 || data.error === "rate_limited") {
+          set("error", `You've sent a few messages today. Email <a href="${mailto()}">${supportEmail}</a> and we'll pick it up.`);
+          return;
+        }
+        if (data.error === "invalid_email") {
+          set("error", "That email doesn't look right.");
+          email.focus();
+          return;
+        }
+        if (!res.ok || data.ok === false) throw new Error(data.error || `HTTP ${res.status}`);
+        set("done", `Thanks! We'll reply to <strong>${esc(email.value.trim())}</strong>, usually within a day or two.`);
+        text.value = "";
+      } catch (err) {
+        console.warn("[support] failed:", err);
+        set("error", `That didn't go through. <a href="${mailto()}">Send it by email instead</a>, your message is already filled in.`);
+      } finally {
+        busy = false;
+      }
+    });
+
+    [text, email].forEach((el) => el.addEventListener("input", () => form.dataset.state === "error" && set("")));
+  });
+</script>
+
+<style>
+  .sm {
+    display: grid;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .sm__label {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.4vw, 28px);
+    letter-spacing: -0.03em;
+  }
+
+  .sm textarea,
+  .sm__email input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 16px;
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .sm textarea {
+    min-height: 150px;
+    padding: 18px 22px;
+    border-radius: 24px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .sm__row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .sm__email {
+    flex: 1;
+  }
+
+  .sm__email input {
+    height: 56px;
+    padding: 0 22px;
+    border-radius: 999px;
+  }
+
+  .sm textarea::placeholder,
+  .sm__email input::placeholder {
+    color: var(--text-3);
+  }
+
+  .sm textarea:focus,
+  .sm__email input:focus {
+    border-color: rgba(156, 136, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .sm__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .sm__btn {
+    height: 56px;
+    min-width: 130px;
+  }
+
+  .sm__spin,
+  .sm__check {
+    display: none;
+    width: 22px;
+    height: 22px;
+  }
+
+  .sm__spin {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-ink);
+    border-radius: 50%;
+    animation: sm-spin 0.8s linear infinite;
+  }
+
+  .sm[data-state="loading"] .sm__text,
+  .sm[data-state="done"] .sm__text {
+    display: none;
+  }
+
+  .sm[data-state="loading"] .sm__spin,
+  .sm[data-state="done"] .sm__check {
+    display: block;
+  }
+
+  .sm[data-state="done"] .sm__btn {
+    background: var(--success);
+  }
+
+  .sm__msg {
+    min-height: 1.5em;
+    padding-left: 4px;
+    font-size: 15px;
+    color: var(--text-2);
+  }
+
+  .sm__from {
+    margin-top: -6px;
+    padding-left: 4px;
+    font-size: 14px;
+    color: var(--text-3);
+  }
+
+  .sm__msg a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .sm[data-state="error"] .sm__msg {
+    color: #f19aa6;
+  }
+
+  .sm[data-state="done"] .sm__msg {
+    color: var(--success);
+  }
+
+  @keyframes sm-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .sm__row {
+      flex-direction: column;
+    }
+    .sm__btn {
+      width: 100%;
+    }
+  }
+</style>

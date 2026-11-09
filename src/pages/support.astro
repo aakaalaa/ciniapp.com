@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Faq from "../components/Faq.astro";
+import SupportMessage from "../components/SupportMessage.astro";
 import { site } from "../site";
 
 import gear from "../assets/3d/gear.png";
@@ -9,9 +10,6 @@ import bulb from "../assets/3d/bulb.png";
 import heart from "../assets/3d/heart.png";
 
 const comingSoon = site.store.status === "coming-soon";
-const bugMail = `mailto:${site.email}?subject=${encodeURIComponent("Bug report")}&body=${encodeURIComponent(
-  "What happened:\n\nWhat I expected:\n\niPhone model and iOS version:\n\n(Attach a screenshot if you can.)"
-)}`;
 
 // Every answer must match what the app does today.
 const groups = [
@@ -116,14 +114,14 @@ const groups = [
 <Base title="Support" description="Get help with Cini: contact us, report a bug, and find answers to common questions.">
   <PageHero
     title={`How can we <span class="accent">help?</span>`}
-    lede="Find a quick answer below, or email us. A real person reads every message."
+    lede="Find a quick answer below, or send us a message. A real person reads every one."
     art={[gear, bulb, heart]}
   >
     <div class="sup__actions" data-reveal>
-      <a class="btn" href={`mailto:${site.email}?subject=${encodeURIComponent("Cini support")}`} data-cursor="link" data-magnetic>
+      <a class="btn" href="#message" data-cursor="link" data-magnetic>Message us</a>
+      <a class="btn btn--ghost" href={`mailto:${site.email}?subject=${encodeURIComponent("Cini support")}`} data-cursor="link">
         Email {site.email}
       </a>
-      <a class="btn btn--ghost" href={bugMail} data-cursor="link">Report a bug</a>
     </div>
   </PageHero>
 
@@ -148,13 +146,11 @@ const groups = [
           ))
         }
 
-        <section class="sup__bug" data-reveal>
-          <h2>Found a bug?</h2>
-          <p>
-            Email us with what happened, what you expected, your iPhone model and iOS version, and a screenshot if you can. The more
-            detail, the faster we can fix it.
+        <section class="sup__bug" id="message" data-reveal>
+          <SupportMessage />
+          <p class="sup__fine">
+            We use your message and email only to help you. See our <a href="/privacy">Privacy Policy</a>.
           </p>
-          <a class="btn" href={bugMail} data-cursor="link">Send a bug report</a>
         </section>
       </div>
     </div>
@@ -218,9 +214,9 @@ const groups = [
   }
 
   .sup__bug {
+    scroll-margin-top: 110px;
     display: grid;
     gap: 16px;
-    justify-items: start;
     padding: 36px;
     border-radius: var(--radius-l);
     background:
@@ -233,9 +229,15 @@ const groups = [
     margin: 0;
   }
 
-  .sup__bug p {
-    color: var(--text-2);
-    max-width: 60ch;
+  .sup__fine {
+    color: var(--text-3);
+    font-size: 14px;
+    max-width: 64ch;
+  }
+
+  .sup__fine a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   @media (max-width: 900px) {

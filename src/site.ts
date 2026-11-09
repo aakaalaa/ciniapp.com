@@ -28,7 +28,7 @@ export const site = {
   legal: {
     provider: "Abimbola Akala, doing business as Cini",
     governingLaw: "California",
-    lastUpdated: "November 8, 2026",
+    lastUpdated: "November 9, 2026",
     minAge: 13,
   },
 
@@ -38,6 +38,10 @@ export const site = {
 
   // Google Apps Script web app ("Cini waitlist" project, see waitlist-apps-script.gs) that appends to the
   // "Kini Waitlist" Google Sheet. Empty = the form shows an error instead of pretending to save.
+  // The "Message us" box on Support posts here (cloud function submitSupportMessage in Firebase project kini-x).
+  // Empty = Send opens the visitor's email app with their message filled in instead.
+  supportEndpoint: "https://us-central1-kini-x.cloudfunctions.net/submitSupportMessage",
+
   waitlistEndpoint: "https://script.google.com/macros/s/AKfycbzbEkczlJSABxlXFmrNK9nUtwQptycNMp6JjFRhVqMIlPvp_GQidExaaRy45O8zWqFh/exec",
 };
 
