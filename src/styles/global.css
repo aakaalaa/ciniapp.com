@@ -305,7 +305,8 @@ p {
   margin: -22px 0 0 -22px;
   display: grid;
   place-items: center;
-  border: 1.5px solid rgba(200, 188, 255, 0.55);
+  /* No ring by default: the glowing dot is the cursor. The ring area only shows for the label and image states. */
+  opacity: 0;
   transition:
     width 0.45s var(--ease-out),
     height 0.45s var(--ease-out),
@@ -339,12 +340,8 @@ p {
     scale 0.4s var(--ease-bounce);
 }
 
-.cursor[data-state="link"] .cursor__ring {
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
-  background: rgba(156, 136, 255, 0.14);
-  border-color: rgba(200, 188, 255, 0.8);
+.cursor[data-state="link"] .cursor__dot {
+  scale: 1.7;
 }
 
 .cursor[data-state="label"] .cursor__ring {
@@ -352,7 +349,7 @@ p {
   height: 88px;
   margin: -44px 0 0 -44px;
   background: var(--primary);
-  border-color: transparent;
+  opacity: 1;
 }
 
 .cursor[data-state="label"] .cursor__label {
@@ -369,18 +366,12 @@ p {
   width: 70px;
   height: 70px;
   margin: -35px 0 0 -35px;
-  border-color: transparent;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(6px);
+  opacity: 1;
 }
 
 .cursor[data-state="image"] .cursor__img {
   opacity: 1;
   scale: 1;
-}
-
-.cursor[data-state="text"] .cursor__ring {
-  opacity: 0;
 }
 
 .cursor.is-hidden .cursor__dot,

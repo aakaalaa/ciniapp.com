@@ -36,9 +36,9 @@ export const site = {
   // (Apple requires in-app deletion before review.)
   inAppDeletion: false,
 
-  // Google Apps Script web app URL that appends to the waitlist Sheet.
-  // Empty = the form shows an error instead of pretending to save.
-  waitlistEndpoint: "",
+  // Google Apps Script web app ("Cini waitlist" project, see waitlist-apps-script.gs) that appends to the
+  // "Kini Waitlist" Google Sheet. Empty = the form shows an error instead of pretending to save.
+  waitlistEndpoint: "https://script.google.com/macros/s/AKfycbzbEkczlJSABxlXFmrNK9nUtwQptycNMp6JjFRhVqMIlPvp_GQidExaaRy45O8zWqFh/exec",
 };
 
 export const nav = [

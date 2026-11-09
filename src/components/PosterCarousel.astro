@@ -21,12 +21,7 @@ const cards = (data.titles as Title[])
     <div class="pc" data-carousel role="region" aria-roledescription="carousel" aria-label="Trending this week">
       <div class="pc__deck">
         {cards.map((c, i) => (
-          <figure
-            class="pc__card"
-            data-card={i}
-            data-title={c.title}
-            data-meta={`${c.type === "tv" ? "TV show" : "Movie"}${c.year ? ` · ${c.year}` : ""}`}
-          >
+          <figure class="pc__card" data-card={i}>
             <Image
               src={c.img!}
               alt={`Poster for ${c.title}`}
@@ -38,13 +33,6 @@ const cards = (data.titles as Title[])
           </figure>
         ))}
       </div>
-      <p class="pc__caption" aria-live="polite">
-        <span class="pc__label">Trending this week</span>
-        <span class="pc__now" data-now>
-          <strong>{cards[0].title}</strong> · {cards[0].type === "tv" ? "TV show" : "Movie"}
-          {cards[0].year && ` · ${cards[0].year}`}
-        </span>
-      </p>
     </div>
   )
 }
@@ -62,17 +50,8 @@ const cards = (data.titles as Title[])
       2: { x: 92, r: 12, s: 0.76, dim: 0.6 },
     };
 
-    const now = root.querySelector<HTMLElement>("[data-now]")!;
     let active = 0;
     const place = () => {
-      const front = cards[active];
-      now.classList.remove("is-in");
-      void now.offsetWidth;
-      now.replaceChildren();
-      const strong = document.createElement("strong");
-      strong.textContent = front.dataset.title!;
-      now.append(strong, ` · ${front.dataset.meta}`);
-      now.classList.add("is-in");
       cards.forEach((card, i) => {
         let o = (i - active + n) % n;
         if (o > n / 2) o -= n; // -2..2 for five cards
@@ -180,45 +159,6 @@ const cards = (data.titles as Title[])
     height: 100%;
     object-fit: cover;
     -webkit-user-drag: none;
-  }
-
-  .pc__caption {
-    display: grid;
-    justify-items: center;
-    gap: 4px;
-    text-align: center;
-    max-width: 100%;
-  }
-
-  .pc__label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-3);
-  }
-
-  .pc__now {
-    font-size: 15px;
-    color: var(--text-2);
-    max-width: 30ch;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .pc__now strong {
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .pc__now.is-in {
-    animation: pc-in 0.5s ease 0.3s both;
-  }
-
-  @keyframes pc-in {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
   }
 
   /* Before JS places the cards, show only the front one. */
