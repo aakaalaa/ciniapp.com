@@ -69,10 +69,16 @@ const values = [
     <div class="wrap">
       <div class="founder__card" data-reveal>
         <div class="founder__photo" data-tilt>
-          <Image src={founder} alt="Abimbola Akala, founder of Cini" width={560} class="founder__img" />
+          <Image
+            src={founder}
+            alt="Abimbola Akala, founder of Cini"
+            widths={[480, 720, 960, 1280, 1600]}
+            sizes="(max-width: 760px) calc(100vw - 80px), 480px"
+            quality={88}
+            class="founder__img"
+          />
         </div>
         <div class="founder__note">
-          <p class="eyebrow">A note from the founder</p>
           <p class="founder__quote">
             I love movies. I don't love choosing one. After one too many nights lost to scrolling, I started building the app I wanted: one
             that gets what I'm in the mood for and just tells me what to watch.
