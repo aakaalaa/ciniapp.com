@@ -16,7 +16,12 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     <nav class="nav__links" aria-label="Main">
       {
         nav.map((l) => (
-          <a href={l.href} class:list={["nav__link", { "is-active": path === l.href }]} data-cursor="link">
+          <a
+            href={l.href}
+            class:list={["nav__link", { "is-active": path === l.href }]}
+            aria-current={path === l.href ? "page" : undefined}
+            data-cursor="link"
+          >
             {l.label}
           </a>
         ))
@@ -33,9 +38,13 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 
   <div class="menu" id="menu" hidden>
     <nav aria-label="Mobile">
-      <a href="/">Home</a>
-      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
-      <a href="/contact">Contact</a>
+      {
+        [{ href: "/", label: "Home" }, ...nav, { href: "/contact", label: "Contact" }].map((l) => (
+          <a href={l.href} aria-current={path === l.href ? "page" : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
     </nav>
     <a href="/#waitlist" class="btn">Join the waitlist</a>
   </div>
@@ -46,19 +55,10 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   const toggle = navEl.querySelector<HTMLButtonElement>(".nav__toggle")!;
   const menu = navEl.querySelector<HTMLElement>(".menu")!;
 
-  let lastY = scrollY;
-  addEventListener(
-    "scroll",
-    () => {
-      const y = scrollY;
-      navEl.classList.toggle("is-scrolled", y > 24);
-      if (!navEl.classList.contains("is-open")) {
-        navEl.classList.toggle("is-hidden", y > lastY && y > 400);
-      }
-      lastY = y;
-    },
-    { passive: true }
-  );
+  // The nav stays on screen at all times; scrolling only adds the frosted background.
+  const onScroll = () => navEl.classList.toggle("is-scrolled", scrollY > 24);
+  onScroll();
+  addEventListener("scroll", onScroll, { passive: true });
 
   function setOpen(open: boolean) {
     navEl.classList.toggle("is-open", open);
@@ -79,11 +79,6 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     inset: 0 0 auto 0;
     z-index: 100;
     padding: 14px var(--gutter);
-    transition: transform 0.5s var(--ease-out);
-  }
-
-  .nav.is-hidden {
-    transform: translateY(-120%);
   }
 
   .nav__bar {
@@ -142,10 +137,16 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
       background-color 0.2s ease;
   }
 
-  .nav__link:hover,
-  .nav__link.is-active {
+  .nav__link:hover {
     color: var(--text);
     background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Current page: a solid light pill with dark text, so it reads at a glance without using the brand purple. */
+  .nav__link.is-active {
+    color: var(--bg);
+    background: var(--text);
+    font-weight: 700;
   }
 
   .nav__toggle {
@@ -210,6 +211,12 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     font-size: 40px;
     letter-spacing: -0.04em;
     border-bottom: 1px solid var(--line);
+    color: var(--text-2);
+  }
+
+  .menu nav a[aria-current="page"] {
+    color: var(--text);
+    font-weight: 700;
   }
 
   @media (max-width: 860px) {

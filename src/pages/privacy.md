@@ -1,7 +1,6 @@
 ---
 layout: ../layouts/Legal.astro
 title: Privacy Policy
-eyebrow: Legal
 description: What Cini collects, why, who we share it with, and the choices you have.
 summary: "<strong>The short version:</strong> Cini uses what you tell it and what you do in the app to recommend things to watch. We don't sell your data, we don't show ads, and we don't track you across other apps or websites. You can get a copy of your data or delete it at any time."
 ---

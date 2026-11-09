@@ -1,7 +1,6 @@
 ---
 layout: ../layouts/Legal.astro
 title: Terms of Use
-eyebrow: Legal
 description: The rules for using Cini, including accounts, Cini Points, subscriptions and your rights.
 summary: "<strong>The short version:</strong> be 13 or older, keep your account to yourself, and use Cini for personal fun. Cini Points and credits have no cash value. Recommendations are suggestions, and streaming services are run by other companies. If you ever subscribe, Apple handles billing and you can cancel any time."
 ---
