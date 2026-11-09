@@ -1,0 +1,2 @@
+# Posters for the homepage carousel are downloaded before each dev/build from src/data/trending.json.
+src/assets/trending/

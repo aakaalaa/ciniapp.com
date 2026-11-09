@@ -1,0 +1,533 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Phone from "../components/Phone.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+import MoodScreen from "../components/MoodScreen.astro";
+import CtaCard from "../components/CtaCard.astro";
+import PosterCarousel from "../components/PosterCarousel.astro";
+import { moods, moodPairs as pairs, moodById } from "../moods";
+
+import sTitle from "../assets/screens/title.png";
+import sWatch from "../assets/screens/watch.png";
+import sDiscover from "../assets/screens/discover.png";
+
+// Chapter 01 uses the coded <MoodScreen /> (no screenshot), so it has no `screen`.
+const chapters = [
+  {
+    title: "Pick a vibe",
+    body: "Up to two moods, movie or show, then let's roll. No typing, no endless rows.",
+    screen: null,
+    alt: "",
+  },
+  {
+    title: "Meet your match",
+    body: "One title at a time, with IMDb and Letterboxd ratings, cast and a quick synopsis. Skip it, mark it seen, save it or share it.",
+    screen: sTitle,
+    alt: "A recommended title in Cini with ratings, cast and watch buttons",
+  },
+  {
+    title: "Play it on your TV",
+    body: "Tap watch to see where it's streaming and send it to your Apple TV with a free Apple Shortcut. Set it up once, then it's one tap.",
+    screen: sWatch,
+    alt: "Cini's play on TV screen",
+  },
+  {
+    title: "Keep exploring",
+    body: "Browse fresh shelves picked for you, revisit your watchlist, or search by title, actor or theme.",
+    screen: sDiscover,
+    alt: "Cini Discover page with shelves of titles",
+  },
+];
+
+const heroIcons = [
+  // Kept to the corners so they frame the poster fan without covering the front card.
+  { img: moodById.cozy.img, x: "2%", y: "4%", s: 96, d: 0.6, r: -12 },
+  { img: moodById.heartfelt.img, x: "82%", y: "0%", s: 92, d: 1, r: 10 },
+  { img: moodById.complex.img, x: "90%", y: "60%", s: 84, d: 0.8, r: 8 },
+  { img: moodById.thrilling.img, x: "-4%", y: "66%", s: 80, d: 1.2, r: -6 },
+  { img: moodById.dark.img, x: "80%", y: "88%", s: 76, d: 0.5, r: 14 },
+  { img: moodById.funny.img, x: "6%", y: "90%", s: 80, d: 0.9, r: -10 },
+];
+
+const tourScreens = chapters.filter((c) => c.screen).map((c) => ({ src: c.screen!, alt: c.alt }));
+---
+
+<Base>
+  <!-- ============ HERO ============ -->
+  <section class="hero" data-hero>
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow" data-reveal>Coming soon to iPhone</p>
+        <h1 class="display" data-split>
+          What to watch.<br /><span class="accent">Found.</span>
+        </h1>
+        <p class="lede" data-reveal>
+          Tell Cini how you feel. Get one great movie or show picked just for you, then play it on your TV.
+        </p>
+        <div class="hero__form" data-reveal>
+          <WaitlistForm source="hero" />
+        </div>
+      </div>
+
+      <div class="hero__stage" data-stage>
+        <div class="hero__phone" data-tilt-phone>
+          <PosterCarousel />
+        </div>
+        {
+          heroIcons.map((ic) => (
+            <div class="hero__icon" style={`left:${ic.x};top:${ic.y};--s:${ic.s}px;--r:${ic.r}deg`} data-depth={ic.d}>
+              <Image src={ic.img} alt="" width={ic.s * 2} loading="eager" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATEMENT ============ -->
+  <section class="statement" id="statement">
+    <div class="wrap">
+      <p class="statement__text" data-scrub>
+        Thirty minutes of scrolling. Zero movies watched.
+        <span class="accent">Cini picks. You press play.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ TOUR ============ -->
+  <section class="tour" data-tour>
+    <div class="wrap tour__grid">
+      <div class="tour__chapters">
+        {
+          chapters.map((c, i) => (
+            <article class="chapter" data-chapter={i}>
+              <h2 class="h2">{c.title}</h2>
+              <p class="lede">{c.body}</p>
+              <div class="chapter__phone">
+                {c.screen ? (
+                  <Phone screens={[{ src: c.screen, alt: c.alt }]} width={240} />
+                ) : (
+                  <Phone width={240}>
+                    <MoodScreen />
+                  </Phone>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <div class="tour__sticky">
+        <div class="tour__stage">
+          <div class="tour__phone">
+            <Phone screens={tourScreens} width={272}>
+              <MoodScreen />
+            </Phone>
+          </div>
+          <ol class="tour__dots" aria-hidden="true">
+            {chapters.map((_, i) => <li class:list={{ "is-active": i === 0 }} />)}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOOD PLAYGROUND ============ -->
+  <section class="play" data-play data-pairs={JSON.stringify(pairs)}>
+    <div class="wrap play__inner">
+      <h2 class="h2" data-split>What's the vibe tonight?</h2>
+
+      <div class="play__moods" role="group" aria-label="Moods">
+        {
+          moods.map((m) => (
+            <button
+              type="button"
+              class="mood"
+              data-mood={m.id}
+              data-color={m.color}
+              data-line={m.line}
+              aria-pressed="false"
+              data-cursor="image"
+              data-cursor-img={m.img.src}
+              style={`color:${m.color}`}
+            >
+              <Image src={m.img} alt="" width={160} class="mood__img" />
+              <span class="mood__label">{m.label}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="play__result" aria-live="polite">
+        <p class="play__line" data-result></p>
+        <a href="#waitlist" class="btn play__go" data-cursor="link" data-magnetic>Let's roll</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WAITLIST ============ -->
+  <CtaCard source="home-cta" id="waitlist" />
+</Base>
+
+<script>
+  // ---- Mood playground ----
+  const play = document.querySelector<HTMLElement>("[data-play]");
+  if (play) {
+    const pairs: Record<string, string> = JSON.parse(play.dataset.pairs || "{}");
+    const order = ["cozy", "heartfelt", "funny", "thrilling", "dark", "complex"]; // same as moodOrder
+    const buttons = [...play.querySelectorAll<HTMLButtonElement>("[data-mood]")];
+    const lineEl = play.querySelector<HTMLElement>("[data-result]")!;
+    let picked: HTMLButtonElement[] = [];
+
+    const render = () => {
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(picked.includes(b))));
+      const [a, b] = picked;
+      play.style.setProperty("--mood-a", a?.dataset.color || "transparent");
+      play.style.setProperty("--mood-b", (b || a)?.dataset.color || "transparent");
+      play.classList.toggle("has-pick", picked.length > 0);
+
+      let text = "";
+      if (picked.length === 1) text = a.dataset.line!;
+      if (picked.length === 2) {
+        const key = [a.dataset.mood!, b.dataset.mood!].sort((x, y) => order.indexOf(x) - order.indexOf(y)).join("+");
+        text = pairs[key] || `${a.dataset.mood} meets ${b.dataset.mood}.`;
+      }
+      lineEl.classList.remove("is-in");
+      void lineEl.offsetWidth;
+      lineEl.textContent = text;
+      lineEl.classList.add("is-in");
+    };
+
+    buttons.forEach((btn) =>
+      btn.addEventListener("click", () => {
+        if (picked.includes(btn)) picked = picked.filter((p) => p !== btn);
+        else {
+          picked.push(btn);
+          if (picked.length > 2) picked.shift();
+        }
+        btn.classList.remove("is-pop");
+        void btn.offsetWidth;
+        btn.classList.add("is-pop");
+        render();
+      })
+    );
+  }
+</script>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding: 120px 0 80px;
+    overflow: hidden;
+  }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 28px;
+    justify-items: start;
+  }
+
+  .hero__form {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .hero__stage {
+    position: relative;
+    height: min(76vh, 720px);
+    display: grid;
+    place-items: center;
+    perspective: 1400px;
+  }
+
+  .hero__phone {
+    width: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .hero__icon {
+    position: absolute;
+    width: var(--s);
+    height: var(--s);
+    rotate: var(--r);
+    will-change: transform;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+  }
+
+  .hero__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: bob 6s ease-in-out infinite;
+  }
+
+  .hero__icon:nth-child(odd) img {
+    animation-duration: 7.5s;
+    animation-delay: -2s;
+  }
+
+  @keyframes bob {
+    50% {
+      transform: translateY(-14px) rotate(4deg);
+    }
+  }
+
+  /* ---------- Statement ---------- */
+  .statement {
+    padding: clamp(100px, 18vh, 200px) 0;
+  }
+
+  .statement__text {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 4.6vw, 64px);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    max-width: 22ch;
+  }
+
+  /* ---------- Tour ---------- */
+  .tour {
+    position: relative;
+  }
+
+  .tour__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .chapter {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+    opacity: 0.25;
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .chapter.is-active {
+    opacity: 1;
+  }
+
+  .chapter__phone {
+    display: none;
+  }
+
+  .tour__sticky {
+    position: relative;
+  }
+
+  .tour__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    perspective: 1400px;
+  }
+
+  .tour__phone {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .tour__dots {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tour__dots li {
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    transition:
+      height 0.5s var(--ease-out),
+      background-color 0.3s ease;
+  }
+
+  .tour__dots li.is-active {
+    height: 28px;
+    background: var(--primary);
+  }
+
+  /* ---------- Mood playground ---------- */
+  .play {
+    position: relative;
+    padding: clamp(100px, 16vh, 180px) 0;
+    background:
+      radial-gradient(50% 60% at 25% 60%, color-mix(in srgb, var(--mood-a) 26%, transparent), transparent 70%),
+      radial-gradient(50% 60% at 75% 40%, color-mix(in srgb, var(--mood-b) 26%, transparent), transparent 70%);
+    transition:
+      --mood-a 0.8s ease,
+      --mood-b 0.8s ease;
+  }
+
+  .play__inner {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 18px;
+  }
+
+  .play__moods {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: clamp(10px, 2vw, 24px);
+    margin: 40px 0 24px;
+    width: 100%;
+    max-width: 980px;
+  }
+
+  .mood {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 22px 8px 18px;
+    border: 0;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--card-shadow);
+    transition:
+      transform 0.4s var(--ease-bounce),
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .mood:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .mood[aria-pressed="true"] {
+    --c: currentColor;
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow:
+      inset 0 0 0 2px var(--c),
+      0 20px 50px -20px var(--c);
+  }
+
+  .mood__img {
+    width: clamp(56px, 8vw, 96px);
+    height: auto;
+    filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.45));
+    transition: transform 0.5s var(--ease-bounce);
+  }
+
+  .mood[aria-pressed="true"] .mood__img {
+    transform: scale(1.12) rotate(-6deg);
+  }
+
+  .mood.is-pop .mood__img {
+    animation: pop 0.5s var(--ease-bounce);
+  }
+
+  @keyframes pop {
+    40% {
+      transform: scale(0.82) rotate(6deg);
+    }
+  }
+
+  .mood__label {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .play__result {
+    display: grid;
+    justify-items: center;
+    gap: 28px;
+  }
+
+  .play__line {
+    min-height: 2.4em;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.6vw, 34px);
+    letter-spacing: -0.03em;
+    max-width: 26ch;
+  }
+
+  .play__line.is-in {
+    animation: line-in 0.6s var(--ease-out);
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+  }
+
+  .play__go {
+    opacity: 0.35;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      transform 0.4s var(--ease-bounce);
+  }
+
+  .play.has-pick .play__go {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero {
+      padding-top: 110px;
+    }
+    .hero__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .hero__stage {
+      height: 470px;
+    }
+    .hero__icon {
+      --s: 64px !important;
+    }
+    .tour__grid {
+      grid-template-columns: 1fr;
+    }
+    .tour__sticky {
+      display: none;
+    }
+    .chapter {
+      min-height: 0;
+      padding: 56px 0;
+      opacity: 1;
+    }
+    .chapter__phone {
+      display: grid;
+      justify-items: center;
+      margin-top: 28px;
+    }
+    .play__moods {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

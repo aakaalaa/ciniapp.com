@@ -1,0 +1,193 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { site } from "../site";
+
+import heart from "../assets/3d/heart.png";
+import molecule from "../assets/3d/molecule.png";
+import tea from "../assets/3d/tea.png";
+
+const mail = (subject: string, to = site.email) => `mailto:${to}?subject=${encodeURIComponent(subject)}`;
+
+const cards = [
+  {
+    eyebrow: "Help and feedback",
+    title: "Questions about the app",
+    body: "Something not working, an idea, or just want to say hi.",
+    href: mail("Hello Cini"),
+    email: site.email,
+  },
+  {
+    eyebrow: "Privacy",
+    title: "Your data",
+    body: "Ask for a copy of your data, a correction, or deletion.",
+    href: mail("Privacy request"),
+    email: site.email,
+  },
+  {
+    eyebrow: "Press and partners",
+    title: "Work with us",
+    body: "Press, studios, streaming services and creators.",
+    href: mail("Partnership"),
+    email: site.email,
+  },
+  {
+    eyebrow: "Investors",
+    title: "Investor relations",
+    body: "For conversations about investing in Cini.",
+    href: mail("Investor inquiry", site.investorEmail),
+    email: site.investorEmail,
+  },
+];
+
+const socials = [
+  { label: "Instagram", url: site.social.instagram },
+  { label: "LinkedIn", url: site.social.linkedin },
+].filter((s) => s.url);
+---
+
+<Base title="Contact" description={`Contact Cini at ${site.email}.`}>
+  <PageHero
+    eyebrow="Contact"
+    title={`Let's <span class="accent">talk.</span>`}
+    lede="We're a small team, so every email lands with a real person. Pick the one that fits."
+    art={[heart, molecule, tea]}
+  />
+
+  <section class="ct">
+    <div class="wrap">
+      <a class="ct__big" href={mail("Hello Cini")} data-reveal data-cursor="label" data-cursor-label="email">
+        <span class="eyebrow">Email us</span>
+        <span class="ct__addr">{site.email}</span>
+      </a>
+
+      <div class="ct__grid">
+        {
+          cards.map((c) => (
+            <a class="ct__card" href={c.href} data-reveal data-tilt data-cursor="link">
+              <span class="eyebrow">{c.eyebrow}</span>
+              <h2>{c.title}</h2>
+              <p>{c.body}</p>
+              <span class="ct__email">{c.email} →</span>
+            </a>
+          ))
+        }
+      </div>
+
+      {
+        socials.length > 0 && (
+          <div class="ct__social" data-reveal>
+            <p>Follow along</p>
+            <div>
+              {socials.map((s) => (
+                <a class="btn btn--ghost btn--sm" href={s.url} target="_blank" rel="noopener" data-cursor="link">
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct {
+    padding: 0 0 140px;
+  }
+
+  .ct__big {
+    display: grid;
+    gap: 14px;
+    padding: clamp(32px, 5vw, 64px);
+    border-radius: 48px;
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(156, 136, 255, 0.35), transparent 70%),
+      var(--surface);
+    box-shadow: var(--card-shadow-accent);
+    transition: transform 0.5s var(--ease-bounce);
+  }
+
+  .ct__big:hover {
+    transform: scale(1.01);
+  }
+
+  .ct__addr {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    overflow-wrap: anywhere;
+  }
+
+  .ct__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .ct__card {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 28px;
+    border-radius: var(--radius-l);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: var(--card-shadow);
+    transition: background-color 0.3s ease;
+  }
+
+  .ct__card:hover {
+    background: rgba(156, 136, 255, 0.1);
+  }
+
+  .ct__card h2 {
+    font-size: 24px;
+  }
+
+  .ct__card p {
+    color: var(--text-2);
+    font-size: 15px;
+  }
+
+  .ct__email {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--primary-2);
+    overflow-wrap: anywhere;
+  }
+
+  .ct__social {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    color: var(--text-2);
+  }
+
+  .ct__social div {
+    display: flex;
+    gap: 10px;
+  }
+
+  @media (max-width: 1000px) {
+    .ct__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .ct__grid {
+      grid-template-columns: 1fr;
+    }
+    .ct__big {
+      border-radius: 32px;
+    }
+  }
+</style>

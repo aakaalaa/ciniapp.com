@@ -1,0 +1,233 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+import { nav } from "../site";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="nav" data-nav>
+  <div class="nav__bar">
+    <a href="/" class="nav__logo" aria-label="Cini home" data-cursor="link">
+      <Image src={logo} alt="" width={64} height={64} class="nav__mark" loading="eager" />
+      <span>cini</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Main">
+      {
+        nav.map((l) => (
+          <a href={l.href} class:list={["nav__link", { "is-active": path === l.href }]} data-cursor="link">
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a href="/#waitlist" class="btn btn--sm nav__cta" data-cursor="link" data-magnetic>Join the waitlist</a>
+
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-cursor="link">
+      <span class="sr-only">Menu</span>
+      <span class="nav__burger" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Mobile">
+      <a href="/">Home</a>
+      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href="/contact">Contact</a>
+    </nav>
+    <a href="/#waitlist" class="btn">Join the waitlist</a>
+  </div>
+</header>
+
+<script>
+  const navEl = document.querySelector<HTMLElement>("[data-nav]")!;
+  const toggle = navEl.querySelector<HTMLButtonElement>(".nav__toggle")!;
+  const menu = navEl.querySelector<HTMLElement>(".menu")!;
+
+  let lastY = scrollY;
+  addEventListener(
+    "scroll",
+    () => {
+      const y = scrollY;
+      navEl.classList.toggle("is-scrolled", y > 24);
+      if (!navEl.classList.contains("is-open")) {
+        navEl.classList.toggle("is-hidden", y > lastY && y > 400);
+      }
+      lastY = y;
+    },
+    { passive: true }
+  );
+
+  function setOpen(open: boolean) {
+    navEl.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    menu.hidden = !open;
+    document.documentElement.style.overflow = open ? "hidden" : "";
+  }
+  toggle.addEventListener("click", () => setOpen(!navEl.classList.contains("is-open")));
+  menu.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).closest("a")) setOpen(false);
+  });
+  addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    padding: 14px var(--gutter);
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .nav.is-hidden {
+    transform: translateY(-120%);
+  }
+
+  .nav__bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: 8px 8px 8px 16px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition:
+      background-color 0.4s ease,
+      border-color 0.4s ease,
+      backdrop-filter 0.4s ease;
+  }
+
+  .nav.is-scrolled .nav__bar,
+  .nav.is-open .nav__bar {
+    background: rgba(18, 18, 20, 0.65);
+    border-color: var(--line);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  }
+
+  .nav__logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.04em;
+    color: var(--primary);
+  }
+
+  .nav__mark {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .nav__link {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 15px;
+    color: var(--text-2);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .nav__link:hover,
+  .nav__link.is-active {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav__toggle {
+    display: none;
+    margin-left: auto;
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    position: relative;
+  }
+
+  .nav__burger,
+  .nav__burger::before {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text);
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .nav__burger {
+    top: 19px;
+  }
+
+  .nav__burger::before {
+    content: "";
+    left: 0;
+    top: 6px;
+  }
+
+  .nav.is-open .nav__burger {
+    transform: translateY(3px) rotate(45deg);
+  }
+
+  .nav.is-open .nav__burger::before {
+    transform: translateY(-6px) rotate(-90deg);
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px 8px;
+  }
+
+  .menu[hidden] {
+    display: none;
+  }
+
+  .menu nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu nav a {
+    padding: 10px 0;
+    font-family: var(--font-display);
+    font-size: 40px;
+    letter-spacing: -0.04em;
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (max-width: 860px) {
+    .nav__links,
+    .nav__cta {
+      display: none;
+    }
+    .nav__toggle {
+      display: block;
+    }
+    .nav.is-open {
+      inset: 0;
+      background: rgba(12, 12, 14, 0.96);
+      backdrop-filter: blur(20px);
+    }
+    .nav.is-open .nav__bar {
+      background: transparent;
+      border-color: transparent;
+    }
+  }
+</style>

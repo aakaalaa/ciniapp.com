@@ -1,0 +1,229 @@
+---
+// Required by Google Play (a web page to request deletion) and linked from the Privacy Policy.
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { site } from "../site";
+
+const request = `mailto:${site.email}?subject=${encodeURIComponent("Delete my Cini account")}&body=${encodeURIComponent(
+  "Please delete my Cini account and its data.\n\nMy Cini username:\nThe phone number on my account:\n"
+)}`;
+
+const deleted = [
+  "Your account and sign-in link to Apple or Google",
+  "Your profile: name, username, email, phone number, date of birth and profile photo",
+  "Your preferences: streaming services, genres and the kinds of stories you like",
+  "Your watchlist, seen list and ratings",
+  "Your activity in the app, the taste profile Cini built from it, and your Cini Points and credits",
+  "Your notification settings and device token",
+];
+
+const kept = [
+  "Information we must keep to meet a legal obligation, resolve a dispute or prevent fraud, kept only as long as needed",
+  "Copies in our backups, which are overwritten on a rolling basis",
+  "Totals that can't identify you, such as how many people picked a mood",
+];
+---
+
+<Base
+  title="Delete your account"
+  description="How to delete your Cini account and data, what gets deleted, and how long it takes."
+>
+  <PageHero
+    eyebrow="Your data"
+    title={`Delete your <span class="accent">account.</span>`}
+    lede="You can delete your Cini account and its data at any time. Here's how, and what happens next."
+    compact
+  />
+
+  <section class="del">
+    <div class="wrap del__grid">
+      <div class="del__how">
+        {
+          site.inAppDeletion && (
+            <article class="del__card" data-reveal>
+              <span class="del__n">A</span>
+              <div>
+                <h2>In the app</h2>
+                <p>
+                  Open Cini, go to <strong>Profile → Settings → Delete account</strong>, and confirm. Your account is deleted straight
+                  away.
+                </p>
+              </div>
+            </article>
+          )
+        }
+        <article class="del__card" data-reveal>
+          <span class="del__n">{site.inAppDeletion ? "B" : "1"}</span>
+          <div>
+            <h2>{site.inAppDeletion ? "By email" : "Email us"}</h2>
+            <p>
+              Send an email to <a href={request}>{site.email}</a> with the subject <strong>Delete my Cini account</strong>. Send it from
+              the email address on your account, or include your Cini username and the phone number on your account so we can find
+              it.
+            </p>
+            <a class="btn" href={request} data-cursor="link" data-magnetic>Request deletion</a>
+          </div>
+        </article>
+        <article class="del__card" data-reveal>
+          <span class="del__n">{site.inAppDeletion ? "→" : "2"}</span>
+          <div>
+            <h2>We confirm and delete</h2>
+            <p>
+              We'll check the request came from you, then delete your account and reply to confirm, within 30 days. If we need more
+              information to find your account, we'll ask.
+            </p>
+          </div>
+        </article>
+        <p class="del__note" data-reveal>
+          Deleting your account doesn't cancel an App Store subscription. If you ever subscribe to a paid plan, cancel it in your
+          iPhone's Settings → your name → Subscriptions.
+        </p>
+      </div>
+
+      <div class="del__lists">
+        <div class="del__list" data-reveal>
+          <h2>What we delete</h2>
+          <ul>{deleted.map((d) => <li>{d}</li>)}</ul>
+        </div>
+        <div class="del__list del__list--kept" data-reveal>
+          <h2>What we may keep</h2>
+          <ul>{kept.map((d) => <li>{d}</li>)}</ul>
+        </div>
+        <p class="del__more" data-reveal>
+          Want a copy of your data first, or to delete only some of it? Email <a href={`mailto:${site.email}`}>{site.email}</a>. More
+          in our <a href="/privacy">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .del {
+    padding: 20px 0 140px;
+  }
+
+  .del__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .del__how {
+    display: grid;
+    gap: 16px;
+  }
+
+  .del__card {
+    display: flex;
+    gap: 20px;
+    padding: 30px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+  }
+
+  .del__card > div {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+
+  .del__n {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--primary-ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .del__card h2,
+  .del__list h2 {
+    font-size: 26px;
+  }
+
+  .del__card p,
+  .del__note,
+  .del__more {
+    color: var(--text-2);
+  }
+
+  .del a:not(.btn) {
+    color: var(--primary-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .del strong {
+    color: var(--text);
+  }
+
+  .del__note {
+    padding: 0 8px;
+    font-size: 15px;
+  }
+
+  .del__lists {
+    display: grid;
+    gap: 16px;
+  }
+
+  .del__list {
+    padding: 30px;
+    border-radius: var(--radius-l);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: var(--card-shadow);
+  }
+
+  .del__list ul {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    color: var(--text-2);
+  }
+
+  .del__list li {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .del__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--success)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23121212' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E")
+      center / 12px no-repeat;
+  }
+
+  .del__list--kept li::before {
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1.5px var(--text-3);
+  }
+
+  .del__more {
+    padding: 0 8px;
+    font-size: 15px;
+  }
+
+  @media (max-width: 900px) {
+    .del__grid {
+      grid-template-columns: 1fr;
+    }
+    .del__card {
+      flex-direction: column;
+    }
+  }
+</style>

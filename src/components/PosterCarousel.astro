@@ -1,0 +1,235 @@
+---
+// Hero carousel: 5 titles from TMDB's weekly trending list that score 70%+ on Rotten Tomatoes (at least 2 TV shows).
+// The picks live in src/data/trending.json (refreshed every Monday by scripts/trending.mjs refresh) and the posters are
+// downloaded into src/assets/trending/ before each dev/build (scripts/trending.mjs posters).
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import data from "../data/trending.json";
+
+type Title = { id: number; type: "movie" | "tv"; title: string; year: number | null; rt: number; poster: string };
+
+const files = import.meta.glob<{ default: ImageMetadata }>("../assets/trending/*.jpg", { eager: true });
+const posterFor = (t: Title) => files[`../assets/trending/${t.type}-${t.id}.jpg`]?.default;
+
+const cards = (data.titles as Title[])
+  .map((t) => ({ ...t, img: posterFor(t) }))
+  .filter((t) => t.img);
+---
+
+{
+  cards.length > 0 && (
+    <div class="pc" data-carousel role="region" aria-roledescription="carousel" aria-label="Trending this week">
+      <div class="pc__deck">
+        {cards.map((c, i) => (
+          <figure
+            class="pc__card"
+            data-card={i}
+            data-title={c.title}
+            data-meta={`${c.type === "tv" ? "TV show" : "Movie"}${c.year ? ` · ${c.year}` : ""}`}
+          >
+            <Image
+              src={c.img!}
+              alt={`Poster for ${c.title}`}
+              widths={[300, 520, 780]}
+              sizes="(max-width: 900px) 190px, 250px"
+              loading={i < 3 ? "eager" : "lazy"}
+              class="pc__img"
+            />
+          </figure>
+        ))}
+      </div>
+      <p class="pc__caption" aria-live="polite">
+        <span class="pc__label">Trending this week</span>
+        <span class="pc__now" data-now>
+          <strong>{cards[0].title}</strong> · {cards[0].type === "tv" ? "TV show" : "Movie"}
+          {cards[0].year && ` · ${cards[0].year}`}
+        </span>
+      </p>
+    </div>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((root) => {
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-card]")];
+    const n = cards.length;
+    if (n < 2) return;
+
+    // Slot styles by distance from the front card. Wider decks get the outer slots too.
+    const slots: Record<number, { x: number; r: number; s: number; dim: number }> = {
+      0: { x: 0, r: 0, s: 1, dim: 0 },
+      1: { x: 52, r: 6, s: 0.88, dim: 0.35 },
+      2: { x: 92, r: 12, s: 0.76, dim: 0.6 },
+    };
+
+    const now = root.querySelector<HTMLElement>("[data-now]")!;
+    let active = 0;
+    const place = () => {
+      const front = cards[active];
+      now.classList.remove("is-in");
+      void now.offsetWidth;
+      now.replaceChildren();
+      const strong = document.createElement("strong");
+      strong.textContent = front.dataset.title!;
+      now.append(strong, ` · ${front.dataset.meta}`);
+      now.classList.add("is-in");
+      cards.forEach((card, i) => {
+        let o = (i - active + n) % n;
+        if (o > n / 2) o -= n; // -2..2 for five cards
+        const slot = slots[Math.min(Math.abs(o), 2)];
+        const side = Math.sign(o);
+        card.style.setProperty("--x", `${side * slot.x}%`);
+        card.style.setProperty("--r", `${side * slot.r}deg`);
+        card.style.setProperty("--s", String(slot.s));
+        card.style.setProperty("--dim", String(slot.dim));
+        card.style.zIndex = String(10 - Math.abs(o));
+        card.classList.toggle("is-front", o === 0);
+      });
+    };
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timer = 0;
+    let visible = false;
+    let hovering = false;
+    const stop = () => clearInterval(timer);
+    const start = () => {
+      stop();
+      if (reduce || !visible || hovering || document.hidden) return;
+      timer = window.setInterval(() => {
+        active = (active + 1) % n;
+        place();
+      }, 2800);
+    };
+
+    cards.forEach((card, i) =>
+      card.addEventListener("click", () => {
+        active = i;
+        place();
+        start();
+      })
+    );
+    root.addEventListener("pointerenter", (e) => {
+      if (e.pointerType === "mouse") {
+        hovering = true;
+        stop();
+      }
+    });
+    root.addEventListener("pointerleave", () => {
+      hovering = false;
+      start();
+    });
+    document.addEventListener("visibilitychange", start);
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      start();
+    }).observe(root);
+
+    place();
+    root.classList.add("is-ready");
+  });
+</script>
+
+<style>
+  .pc {
+    display: grid;
+    justify-items: center;
+    gap: 34px;
+    width: 100%;
+  }
+
+  .pc__deck {
+    position: relative;
+    width: clamp(190px, 19vw, 250px);
+    aspect-ratio: 2 / 3;
+  }
+
+  .pc__card {
+    --x: 0%;
+    --r: 0deg;
+    --s: 1;
+    --dim: 0;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.35),
+      0 34px 60px -26px rgba(0, 0, 0, 0.85);
+    transform: translateX(var(--x)) rotate(var(--r)) scale(var(--s));
+    transform-origin: 50% 90%;
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Darken the cards behind the front one. */
+  .pc__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: var(--dim);
+    transition: opacity 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+    pointer-events: none;
+  }
+
+  .pc__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-user-drag: none;
+  }
+
+  .pc__caption {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .pc__label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+
+  .pc__now {
+    font-size: 15px;
+    color: var(--text-2);
+    max-width: 30ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pc__now strong {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .pc__now.is-in {
+    animation: pc-in 0.5s ease 0.3s both;
+  }
+
+  @keyframes pc-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Before JS places the cards, show only the front one. */
+  .pc:not(.is-ready) .pc__card:not(:first-child) {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pc__card,
+    .pc__card::after {
+      transition: none;
+    }
+  }
+</style>

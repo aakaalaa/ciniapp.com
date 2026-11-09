@@ -1,0 +1,95 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title} | Cini` : "Cini | What to watch. Found.";
+const canonical = new URL(Astro.url.pathname, site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0c0c0e" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cini" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      // Turn on entrance animations only when JS runs and motion is welcome.
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("motion");
+        // Safety net: if the motion script never starts (blocked, failed to load),
+        // show everything rather than leave content hidden.
+        setTimeout(function () {
+          if (!window.__motionReady) document.documentElement.classList.remove("motion");
+        }, 3000);
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <div class="cursor" aria-hidden="true">
+      <div class="cursor__ring">
+        <span class="cursor__label"></span>
+        <img class="cursor__img" alt="" />
+      </div>
+      <div class="cursor__dot"></div>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <script>
+      import "../scripts/motion";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: clip;
+  }
+  .skip {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 2000;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-ink);
+    font-weight: 600;
+    transform: translateY(-200%);
+  }
+  .skip:focus {
+    transform: none;
+  }
+</style>

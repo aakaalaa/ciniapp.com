@@ -1,0 +1,224 @@
+---
+import { site } from "../site";
+
+const year = new Date().getFullYear();
+const cols = [
+  {
+    title: "Product",
+    links: [
+      { href: "/how-it-works", label: "How it works" },
+      { href: "/#waitlist", label: "Join the waitlist" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About us" },
+      { href: "/contact", label: "Contact" },
+    ],
+  },
+  {
+    title: "Help",
+    links: [
+      { href: "/support", label: "Support & FAQ" },
+      { href: "/delete-account", label: "Delete your account" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms of Use" },
+    ],
+  },
+];
+
+const socials = [
+  { key: "instagram", label: "Instagram", url: site.social.instagram },
+  { key: "linkedin", label: "LinkedIn", url: site.social.linkedin },
+].filter((s) => s.url);
+---
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__hello">
+        <p class="foot__kicker">Questions, ideas, love letters?</p>
+        <a class="foot__mail" href={`mailto:${site.email}`} data-cursor="link">{site.email}</a>
+        {
+          socials.length > 0 && (
+            <ul class="foot__social" aria-label="Cini on social media">
+              {socials.map((s) => (
+                <li>
+                  <a href={s.url} target="_blank" rel="noopener" aria-label={s.label} data-cursor="link">
+                    {s.key === "instagram" && (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="18" height="18" rx="5" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                      </svg>
+                    )}
+                    {s.key === "linkedin" && (
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.6 4.77 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.71 0-1.97 1.33-1.97 2.7V21h-4V9.75Z" />
+                      </svg>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <nav class="foot__cols" aria-label="Footer">
+        {
+          cols.map((c) => (
+            <div>
+              <h3>{c.title}</h3>
+              <ul>
+                {c.links.map((l) => (
+                  <li>
+                    <a href={l.href} data-cursor="link">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="foot__base">
+      <p>© {year} Cini. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    position: relative;
+    padding: 120px 0 32px;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .foot__top {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: 64px;
+  }
+
+  .foot__kicker {
+    color: var(--text-2);
+    margin-bottom: 10px;
+  }
+
+  .foot__mail {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3.2vw, 40px);
+    letter-spacing: -0.03em;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+    transition: background-size 0.5s var(--ease-out);
+  }
+
+  .foot__mail:hover {
+    background-size: 100% 2px;
+  }
+
+  .foot__social {
+    display: flex;
+    gap: 10px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot__social a {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-2);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.4s var(--ease-bounce);
+  }
+
+  .foot__social a:hover {
+    color: var(--primary-ink);
+    background: var(--primary);
+    transform: translateY(-3px) rotate(-6deg);
+  }
+
+  .foot__social svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .foot__cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .foot__cols h3 {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+
+  .foot__cols ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .foot__cols a {
+    color: var(--text-2);
+    font-size: 15px;
+    transition: color 0.2s ease;
+  }
+
+  .foot__cols a:hover {
+    color: var(--text);
+  }
+
+  .foot__base {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  @media (max-width: 900px) {
+    .foot {
+      padding-top: 80px;
+    }
+    .foot__top {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .foot__cols {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 36px;
+    }
+    .foot__base {
+      flex-direction: column;
+    }
+  }
+</style>

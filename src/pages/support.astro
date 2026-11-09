@@ -1,0 +1,256 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Faq from "../components/Faq.astro";
+import { site } from "../site";
+
+import gear from "../assets/3d/gear.png";
+import bulb from "../assets/3d/bulb.png";
+import heart from "../assets/3d/heart.png";
+
+const comingSoon = site.store.status === "coming-soon";
+const bugMail = `mailto:${site.email}?subject=${encodeURIComponent("Bug report")}&body=${encodeURIComponent(
+  "What happened:\n\nWhat I expected:\n\niPhone model and iOS version:\n\n(Attach a screenshot if you can.)"
+)}`;
+
+// Every answer must match what the app does today.
+const groups = [
+  {
+    title: "Getting started",
+    items: [
+      {
+        q: "What is Cini?",
+        a: "<p>Cini is an iPhone app that recommends movies and TV shows based on your mood and your taste. Pick up to two moods, choose a movie or a show, and Cini gives you one great pick at a time.</p>",
+      },
+      {
+        q: "When can I download Cini?",
+        a: comingSoon
+          ? `<p>Cini is coming soon to the App Store. <a href="/#waitlist">Join the waitlist</a> and we'll email you the day it launches.</p>`
+          : `<p>Cini is available on the <a href="${site.store.appStoreUrl}">App Store</a>.</p>`,
+      },
+      {
+        q: "Is Cini free?",
+        a: "<p>Yes, Cini is free to download and use. We may add an optional paid plan later. If we do, the app will show you the price and what's included before you pay, and you can cancel any time in your Apple ID settings.</p>",
+      },
+      {
+        q: "Which devices does Cini work on?",
+        a: "<p>Cini is built for iPhone. Playing on your TV works with Apple TV.</p>",
+      },
+    ],
+  },
+  {
+    title: "Your account",
+    items: [
+      {
+        q: "How do I sign in?",
+        a: "<p>With your Apple or Google account. Cini doesn't use passwords.</p>",
+      },
+      {
+        q: "Why does Cini ask for my phone number?",
+        a: "<p>To verify your account. We text you a one-time code when you sign up.</p>",
+      },
+      {
+        q: "Why does Cini ask for my date of birth?",
+        a: `<p>You need to be ${site.legal.minAge} or older to use Cini, so we check your age when you sign up.</p>`,
+      },
+      {
+        q: "How do I delete my account?",
+        a: `<p>See <a href="/delete-account">Delete your account</a>. It explains how, and exactly what gets deleted.</p>`,
+      },
+    ],
+  },
+  {
+    title: "Using Cini",
+    items: [
+      {
+        q: "How do I get better picks?",
+        a: "<p>Rate titles you've watched, mark the ones you've already seen, and save or skip what Cini shows you. Each of these teaches Cini a little more about your taste.</p>",
+      },
+      {
+        q: "Why did I get something outside my usual genres?",
+        a: "<p>On purpose. A few picks in every set come from outside the genres you chose, so you can discover something new. If it's not for you, skip it and Cini learns from that too.</p>",
+      },
+      {
+        q: "How does playing on my TV work?",
+        a: "<p>Tap <strong>watch</strong>, then the Apple TV card. The first time, Cini asks you to add a free Apple Shortcut called <strong>Play From Cini</strong> to your iPhone. After that, Cini opens the title on your Apple TV in one tap.</p><p>If nothing happens, check that Play From Cini is still in your Shortcuts app. If it isn't, tap watch again and Cini will offer to add it.</p>",
+      },
+      {
+        q: "Cini says a title is on a service, but it isn't. Why?",
+        a: `<p>Streaming catalogs change often and differ by country, so availability can be out of date. Tell us at <a href="mailto:${site.email}">${site.email}</a> and we'll look into it.</p>`,
+      },
+      {
+        q: "Where does Cini's movie information come from?",
+        a: `<p>Titles, posters, cast and synopses come from <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>. Streaming availability comes from TMDB too, which gets it from JustWatch. Ratings come from IMDb and Letterboxd. Cini uses the TMDB API but is not endorsed or certified by TMDB.</p>`,
+      },
+    ],
+  },
+  {
+    title: "Cini Points",
+    items: [
+      {
+        q: "What are Cini Points?",
+        a: "<p>You earn 20 Cini Points every time you rate a title. Your points show how much you've helped Cini learn your taste.</p><p>Cini Points have no cash value. You can't buy, sell, transfer or exchange them for money.</p>",
+      },
+      {
+        q: "What are credits?",
+        a: "<p>Credits are an in-app balance. New accounts start with 50, and you earn 2 more every time you rate a title. Like Cini Points, credits have no cash value.</p>",
+      },
+    ],
+  },
+  {
+    title: "Privacy",
+    items: [
+      {
+        q: "Do you sell my data?",
+        a: `<p>No. We don't sell your personal information, we don't show ads, and we don't track you across other apps or websites. Read our <a href="/privacy">Privacy Policy</a> for the details.</p>`,
+      },
+      {
+        q: "Can I get a copy of my data?",
+        a: `<p>Yes. Email <a href="mailto:${site.email}?subject=${encodeURIComponent("Privacy request")}">${site.email}</a> from the email address on your account and we'll send it to you.</p>`,
+      },
+    ],
+  },
+];
+---
+
+<Base title="Support" description="Get help with Cini: contact us, report a bug, and find answers to common questions.">
+  <PageHero
+    eyebrow="Support"
+    title={`How can we <span class="accent">help?</span>`}
+    lede="Find a quick answer below, or email us. A real person reads every message."
+    art={[gear, bulb, heart]}
+  >
+    <div class="sup__actions" data-reveal>
+      <a class="btn" href={`mailto:${site.email}?subject=${encodeURIComponent("Cini support")}`} data-cursor="link" data-magnetic>
+        Email {site.email}
+      </a>
+      <a class="btn btn--ghost" href={bugMail} data-cursor="link">Report a bug</a>
+    </div>
+  </PageHero>
+
+  <section class="sup">
+    <div class="wrap sup__grid">
+      <nav class="sup__nav" aria-label="FAQ topics">
+        {
+          groups.map((g) => (
+            <a href={`#${g.title.toLowerCase().replace(/\s+/g, "-")}`} data-cursor="link">
+              {g.title}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="sup__groups">
+        {
+          groups.map((g) => (
+            <section class="sup__group" id={g.title.toLowerCase().replace(/\s+/g, "-")}>
+              <h2>{g.title}</h2>
+              <Faq items={g.items} />
+            </section>
+          ))
+        }
+
+        <section class="sup__bug" data-reveal>
+          <h2>Found a bug?</h2>
+          <p>
+            Email us with what happened, what you expected, your iPhone model and iOS version, and a screenshot if you can. The more
+            detail, the faster we can fix it.
+          </p>
+          <a class="btn" href={bugMail} data-cursor="link">Send a bug report</a>
+        </section>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sup__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .sup {
+    padding: 0 0 140px;
+  }
+
+  .sup__grid {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+
+  .sup__nav {
+    position: sticky;
+    top: 110px;
+    display: grid;
+    gap: 4px;
+  }
+
+  .sup__nav a {
+    padding: 10px 16px;
+    border-radius: 999px;
+    color: var(--text-2);
+    font-size: 15px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .sup__nav a:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+  }
+
+  .sup__groups {
+    display: grid;
+    gap: 64px;
+  }
+
+  .sup__group {
+    scroll-margin-top: 110px;
+  }
+
+  .sup__group h2,
+  .sup__bug h2 {
+    font-size: clamp(26px, 2.8vw, 36px);
+    margin-bottom: 20px;
+  }
+
+  .sup__bug {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    padding: 36px;
+    border-radius: var(--radius-l);
+    background:
+      radial-gradient(80% 100% at 100% 0%, rgba(156, 136, 255, 0.2), transparent 70%),
+      var(--surface);
+    box-shadow: var(--card-shadow);
+  }
+
+  .sup__bug h2 {
+    margin: 0;
+  }
+
+  .sup__bug p {
+    color: var(--text-2);
+    max-width: 60ch;
+  }
+
+  @media (max-width: 900px) {
+    .sup__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .sup__nav {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .sup__nav a {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+</style>

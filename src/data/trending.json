@@ -1,0 +1,46 @@
+{
+  "updated": "2026-11-09",
+  "source": "TMDB weekly trending, Rotten Tomatoes 70%+ via MDBList",
+  "titles": [
+    {
+      "id": 1423191,
+      "type": "movie",
+      "title": "Resident Evil",
+      "year": 2026,
+      "rt": 96,
+      "poster": "/gAgWJhUSQWCgtKR8170nMkYlBda.jpg"
+    },
+    {
+      "id": 1368337,
+      "type": "movie",
+      "title": "The Odyssey",
+      "year": 2026,
+      "rt": 94,
+      "poster": "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg"
+    },
+    {
+      "id": 1263337,
+      "type": "movie",
+      "title": "Heart of the Beast",
+      "year": 2026,
+      "rt": 84,
+      "poster": "/6sYemVUn79UPKz1ZsSG6kPU4RVy.jpg"
+    },
+    {
+      "id": 225385,
+      "type": "tv",
+      "title": "Black Doves",
+      "year": 2024,
+      "rt": 92,
+      "poster": "/srlsyEfIBz2MNWBndVc3opOaNGS.jpg"
+    },
+    {
+      "id": 279246,
+      "type": "tv",
+      "title": "The Remarried Empress",
+      "year": 2026,
+      "rt": 100,
+      "poster": "/zn3IXZzGavH3qle3o3g1r32eXDy.jpg"
+    }
+  ]
+}

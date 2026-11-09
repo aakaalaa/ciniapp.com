@@ -1,0 +1,237 @@
+---
+// Layout for Markdown legal pages (privacy, terms). Builds a contents list from the h2s.
+import Base from "./Base.astro";
+import { site } from "../site";
+
+interface Props {
+  frontmatter: { title: string; eyebrow?: string; description: string; summary?: string };
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { frontmatter, headings = [] } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Base title={frontmatter.title} description={frontmatter.description}>
+  <section class="lg">
+    <div class="wrap">
+      <header class="lg__head">
+        <p class="eyebrow" data-reveal>{frontmatter.eyebrow ?? "Legal"}</p>
+        <h1 class="lg__title" data-split>{frontmatter.title}</h1>
+        <p class="lg__date" data-reveal>Last updated {site.legal.lastUpdated}</p>
+        {frontmatter.summary && <p class="lg__summary" data-reveal set:html={frontmatter.summary} />}
+      </header>
+
+      <div class="lg__grid">
+        <nav class="lg__toc" aria-label="On this page">
+          <p>On this page</p>
+          <ol>
+            {
+              toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`} data-toc={h.slug} data-cursor="link">
+                    {h.text}
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+        <article class="prose">
+          <slot />
+        </article>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Highlight the section currently being read.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc]")];
+  const map = new Map(links.map((l) => [l.dataset.toc, l]));
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        links.forEach((l) => l.classList.remove("is-active"));
+        map.get(e.target.id)?.classList.add("is-active");
+      });
+    },
+    { rootMargin: "-20% 0px -70% 0px" }
+  );
+  document.querySelectorAll(".prose h2[id]").forEach((h) => io.observe(h));
+</script>
+
+<style>
+  .lg {
+    padding: clamp(140px, 20vh, 200px) 0 120px;
+  }
+
+  .lg__head {
+    display: grid;
+    gap: 18px;
+    max-width: 820px;
+    margin-bottom: 64px;
+  }
+
+  .lg__title {
+    font-size: clamp(44px, 6.5vw, 92px);
+    line-height: 1;
+  }
+
+  .lg__date {
+    color: var(--text-3);
+    font-size: 15px;
+  }
+
+  .lg__summary {
+    margin-top: 8px;
+    padding: 22px 26px;
+    border-radius: var(--radius-m);
+    background: rgba(156, 136, 255, 0.08);
+    box-shadow: var(--card-shadow-accent);
+    color: var(--text);
+    font-size: 17px;
+  }
+
+  .lg__grid {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+
+  .lg__toc {
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+  }
+
+  .lg__toc p {
+    margin-bottom: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+
+  .lg__toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 2px;
+    border-left: 1px solid var(--line);
+  }
+
+  .lg__toc a {
+    display: block;
+    margin-left: -1px;
+    padding: 6px 0 6px 16px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    color: var(--text-2);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .lg__toc a:hover {
+    color: var(--text);
+  }
+
+  .lg__toc a.is-active {
+    color: var(--primary-2);
+    border-left-color: var(--primary);
+  }
+
+  /* ---------- Prose ---------- */
+  .prose {
+    max-width: 72ch;
+    color: var(--text-2);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .prose :global(h2) {
+    margin: 64px 0 16px;
+    padding-top: 8px;
+    font-size: clamp(26px, 2.6vw, 34px);
+    color: var(--text);
+    scroll-margin-top: 110px;
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h3) {
+    margin: 32px 0 10px;
+    font-size: 21px;
+    color: var(--text);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 16px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 22px;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--primary);
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose :global(a) {
+    color: var(--primary-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    margin: 8px 0 24px;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .prose :global(th) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .lg__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+    .lg__toc {
+      position: static;
+      max-height: none;
+    }
+    .prose :global(table) {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>

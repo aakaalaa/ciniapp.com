@@ -1,0 +1,300 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import CtaCard from "../components/CtaCard.astro";
+import { site } from "../site";
+
+import founder from "../assets/people/founder.jpg";
+import reel from "../assets/3d/reel.png";
+import ring from "../assets/3d/ring.png";
+import heart from "../assets/3d/heart.png";
+import tea from "../assets/3d/tea.png";
+import jester from "../assets/3d/jester.png";
+import bulb from "../assets/3d/bulb.png";
+
+// From the PRD's design principles.
+const values = [
+  { img: tea, title: "Effortless by default", body: "Every tap should feel quick and obvious. You should never feel stuck or kept waiting." },
+  { img: jester, title: "Playful and rewarding", body: "Choosing a movie should feel like a game, not homework." },
+  { img: reel, title: "Made for movie night", body: "Dark, calm and posters first, because you're usually on the couch with the lights down." },
+  { img: bulb, title: "One decision at a time", body: "One great pick beats a wall of fifty. Cini shows you one title, and you decide." },
+];
+---
+
+<Base
+  title="About us"
+  description="Cini is an independent app that helps you stop scrolling and start watching. Meet the team and the idea behind it."
+>
+  <PageHero
+    eyebrow="About Cini"
+    title={`Less scrolling. More <span class="accent">watching.</span>`}
+    lede="Cini is a small, independent app with one job: help you find something great to watch, fast."
+    art={[reel, heart, ring]}
+  />
+
+  <!-- Story -->
+  <section class="story">
+    <div class="wrap">
+      <p class="story__text" data-scrub>
+        You open a streaming app. You scroll. You open another one, watch three trailers, ask everyone in the room, and by the time you
+        pick something you're too tired to watch it.
+      </p>
+      <div class="story__cols">
+        <p data-reveal>
+          The problem isn't a lack of things to watch. It's too many choices and not enough help. Movie databases are great for logging
+          what you've already seen. Streaming apps mostly show you what they want you to watch.
+        </p>
+        <p data-reveal>
+          So we built Cini around a different question: how do you feel tonight? Tell us, and we'll hand you one great pick that fits
+          your mood, your taste and the services you already pay for.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="values">
+    <div class="wrap">
+      <div class="values__head">
+        <p class="eyebrow" data-reveal>What we care about</p>
+        <h2 class="h2" data-split>How we build Cini.</h2>
+      </div>
+      <div class="values__grid">
+        {
+          values.map((v) => (
+            <article class="value" data-reveal data-tilt>
+              <Image src={v.img} alt="" width={160} class="value__img" />
+              <h3>{v.title}</h3>
+              <p>{v.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section class="founder">
+    <div class="wrap">
+      <div class="founder__card" data-reveal>
+        <div class="founder__photo" data-tilt>
+          <Image src={founder} alt="Abimbola Akala, founder of Cini" width={560} class="founder__img" />
+        </div>
+        <div class="founder__note">
+          <p class="eyebrow">A note from the founder</p>
+          <p class="founder__quote">
+            I love movies. I hate choosing one. After one too many nights lost to scrolling, I started building the app I wanted: one
+            that gets what I'm in the mood for and just tells me what to watch.
+          </p>
+          <p>
+            I'm a product manager by trade, and Cini is built with the same care I'd put into anything I ship, plus a lot of late
+            nights and a lot of movie nights "for research." I hope it gives you your evenings back.
+          </p>
+          <p class="founder__sign">
+            <strong>Abimbola Akala</strong>
+            <span>Founder</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get in touch -->
+  <section class="touch">
+    <div class="wrap touch__grid">
+      <a class="touch__card" href={`mailto:${site.email}`} data-reveal data-cursor="link">
+        <span class="eyebrow">Say hello</span>
+        <span class="touch__mail">{site.email}</span>
+        <span class="touch__sub">Questions, feedback, press and partnerships.</span>
+      </a>
+      <a class="touch__card" href={`mailto:${site.investorEmail}`} data-reveal data-cursor="link">
+        <span class="eyebrow">Investors</span>
+        <span class="touch__mail">{site.investorEmail}</span>
+        <span class="touch__sub">For investor conversations.</span>
+      </a>
+    </div>
+  </section>
+
+  <CtaCard source="about" />
+</Base>
+
+<style>
+  .story {
+    padding: 10px 0 clamp(80px, 12vh, 140px);
+  }
+
+  .story__text {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 56px);
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+    max-width: 24ch;
+  }
+
+  .story__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 64px;
+    max-width: 980px;
+    color: var(--text-2);
+    font-size: 19px;
+  }
+
+  .values {
+    padding: clamp(60px, 10vh, 120px) 0;
+  }
+
+  .values__head {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 48px;
+  }
+
+  .values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .value {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 30px 26px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+  }
+
+  .value__img {
+    width: 80px;
+    height: auto;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
+  }
+
+  .value h3 {
+    font-size: 22px;
+  }
+
+  .value p {
+    color: var(--text-2);
+    font-size: 16px;
+  }
+
+  .founder {
+    padding: clamp(60px, 10vh, 120px) 0;
+  }
+
+  .founder__card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+    padding: clamp(28px, 4vw, 56px);
+    border-radius: 48px;
+    background:
+      radial-gradient(70% 80% at 0% 0%, rgba(156, 136, 255, 0.2), transparent 70%),
+      var(--surface);
+    box-shadow: var(--card-shadow);
+  }
+
+  .founder__photo {
+    border-radius: 36px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  }
+
+  .founder__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .founder__note {
+    display: grid;
+    gap: 18px;
+    color: var(--text-2);
+  }
+
+  .founder__quote {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.3vw, 30px);
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+
+  .founder__sign {
+    display: grid;
+    gap: 2px;
+    margin-top: 8px;
+  }
+
+  .founder__sign strong {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text);
+  }
+
+  .touch {
+    padding: 20px 0 60px;
+  }
+
+  .touch__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .touch__card {
+    display: grid;
+    gap: 10px;
+    padding: 32px;
+    border-radius: var(--radius-l);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: var(--card-shadow);
+    transition:
+      background-color 0.3s ease,
+      transform 0.45s var(--ease-bounce);
+  }
+
+  .touch__card:hover {
+    background: rgba(156, 136, 255, 0.1);
+    transform: translateY(-4px);
+  }
+
+  .touch__mail {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.4vw, 30px);
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+
+  .touch__sub {
+    color: var(--text-2);
+    font-size: 15px;
+  }
+
+  @media (max-width: 1000px) {
+    .values__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .story__cols,
+    .founder__card,
+    .touch__grid,
+    .values__grid {
+      grid-template-columns: 1fr;
+    }
+    .story__cols {
+      gap: 18px;
+      margin-top: 40px;
+    }
+  }
+</style>

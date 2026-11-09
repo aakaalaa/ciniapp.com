@@ -1,0 +1,76 @@
+---
+import { Image } from "astro:assets";
+import WaitlistForm from "./WaitlistForm.astro";
+import reel from "../assets/3d/reel.png";
+
+interface Props {
+  source: string;
+  title?: string;
+  lede?: string;
+  id?: string;
+}
+const {
+  source,
+  title = "Be the first to know when Cini lands on the App Store.",
+  lede = "",
+  id,
+} = Astro.props;
+---
+
+<section class="cta" id={id}>
+  <div class="wrap">
+    <div class="cta__card" data-reveal>
+      <Image src={reel} alt="" width={420} class="cta__reel" data-spin />
+      <h2 class="h2">{title}</h2>
+      {lede && <p class="lede">{lede}</p>}
+      <WaitlistForm source={source} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding: 40px 0 140px;
+  }
+
+  .cta__card {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    max-width: 860px;
+    margin-inline: auto;
+    padding: clamp(40px, 5.6vw, 76px) var(--gutter);
+    border-radius: 40px;
+    text-align: center;
+    overflow: hidden;
+    background:
+      radial-gradient(80% 90% at 50% 0%, rgba(156, 136, 255, 0.35), transparent 70%),
+      var(--surface);
+    box-shadow: var(--card-shadow);
+  }
+
+  .cta__card h2 {
+    max-width: 18ch;
+    font-size: clamp(24px, 2.9vw, 40px);
+    margin-bottom: 8px;
+  }
+
+  .cta__card .lede {
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .cta__reel {
+    width: 104px;
+    height: auto;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.5));
+  }
+
+  @media (max-width: 600px) {
+    .cta__card {
+      border-radius: 28px;
+    }
+  }
+</style>

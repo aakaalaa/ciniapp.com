@@ -1,0 +1,76 @@
+# Builds the Astro site and deploys it to GitHub Pages.
+# - On every push to main.
+# - Every Monday: first picks this week's trending posters for the homepage carousel (scripts/trending.mjs refresh),
+#   commits src/data/trending.json if it changed, then builds and deploys.
+# - By hand from the Actions tab (Run workflow), which also refreshes the posters.
+#
+# Needs two repository secrets (Settings > Secrets and variables > Actions): TMDB_TOKEN and MDBLIST_KEY.
+# Needs Settings > Pages > Source set to "GitHub Actions".
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 13 * * 1" # Mondays 13:00 UTC (early Monday morning in the US)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pick this week's trending posters
+        if: github.event_name != 'push'
+        # If fewer than 5 titles qualify, the script fails and last week's picks stay.
+        continue-on-error: true
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
+          MDBLIST_KEY: ${{ secrets.MDBLIST_KEY }}
+        run: node scripts/trending.mjs refresh
+
+      - name: Commit the new picks
+        if: github.event_name != 'push'
+        run: |
+          if git diff --quiet -- src/data/trending.json; then
+            echo "Picks unchanged."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/trending.json
+            git commit -m "Refresh trending posters for the week"
+            git push
+          fi
+
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

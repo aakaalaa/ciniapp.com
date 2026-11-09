@@ -1,0 +1,141 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import CtaCard from "../components/CtaCard.astro";
+
+import reel from "../assets/3d/reel.png";
+import dna from "../assets/3d/dna.png";
+import bulb from "../assets/3d/bulb.png";
+import gear from "../assets/3d/gear.png";
+import heart from "../assets/3d/heart.png";
+import molecule from "../assets/3d/molecule.png";
+
+// What goes into a pick. The step-by-step flow lives on the homepage tour.
+// Only describe what the app does today (Apple reviews the site against the build).
+const cards = [
+  {
+    img: bulb,
+    title: "Built on feel, not genre",
+    body: "Every title is described by what it's like to watch: its pace, tone and intensity. That's how Cini tells a cozy mystery from a scary one.",
+  },
+  {
+    img: heart,
+    title: "Your mood leads",
+    body: "The moods you pick shape every pick. Your taste fine-tunes it, but tonight's mood always comes first.",
+  },
+  {
+    img: dna,
+    title: "It learns you",
+    body: "Start with a few titles, genres and services you love. Every seen, save, skip and rating sharpens the next pick, and earns you Cini Points.",
+  },
+  {
+    img: molecule,
+    title: "Room for surprises",
+    body: "A few picks come from outside your usual lane, so you find things you'd never have searched for.",
+  },
+  {
+    img: gear,
+    title: "Your services first",
+    body: "Tell Cini what you subscribe to and see what's streaming on the services you already pay for.",
+  },
+  {
+    img: reel,
+    title: "Every kind of watcher",
+    body: "Hollywood, Bollywood, Nollywood, K-drama, anime and more. Tell Cini what you're into.",
+  },
+];
+---
+
+<Base
+  title="How it works"
+  description="What goes into every Cini pick: how a title feels, your mood, your taste and the services you already pay for."
+>
+  <PageHero
+    eyebrow="How it works"
+    title={`Smarter than a <span class="accent">genre filter.</span>`}
+    lede="Cini reads how a title feels, then matches it to your mood and your taste. Here's what goes into every pick."
+    art={[bulb, heart, dna]}
+  />
+
+  <section class="why">
+    <div class="wrap">
+      <div class="why__grid">
+        {
+          cards.map((c) => (
+            <article class="why__card" data-reveal data-tilt>
+              <Image src={c.img} alt="" width={200} class="why__img" />
+              <h2>{c.title}</h2>
+              <p>{c.body}</p>
+            </article>
+          ))
+        }
+      </div>
+      <p class="why__note" data-reveal>
+        Title details, posters and streaming availability come from
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>. Ratings come from IMDb and Letterboxd.
+      </p>
+    </div>
+  </section>
+
+  <CtaCard source="how-it-works" />
+</Base>
+
+<style>
+  .why {
+    padding: 10px 0 clamp(80px, 12vh, 140px);
+  }
+
+  .why__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .why__card {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    padding: 32px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+  }
+
+  .why__img {
+    width: 96px;
+    height: auto;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
+    transition: transform 0.6s var(--ease-bounce);
+  }
+
+  .why__card:hover .why__img {
+    transform: translateY(-8px) rotate(-8deg) scale(1.06);
+  }
+
+  .why__card h2 {
+    font-size: clamp(22px, 2vw, 26px);
+  }
+
+  .why__card p {
+    color: var(--text-2);
+  }
+
+  .why__note {
+    margin-top: 36px;
+    font-size: 14px;
+    color: var(--text-3);
+  }
+
+  .why__note a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .why__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

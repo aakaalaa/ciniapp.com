@@ -1,0 +1,200 @@
+---
+// Email capture. Posts to a Google Apps Script web app that appends a row to the
+// waitlist Google Sheet (see waitlist-apps-script.gs in the repo root).
+import { site } from "../site";
+
+interface Props {
+  source?: string;
+}
+const { source = "home" } = Astro.props;
+---
+
+<form class="wl" data-waitlist data-endpoint={site.waitlistEndpoint} data-source={source} novalidate>
+  <label class="wl__field">
+    <span class="sr-only">Email address</span>
+    <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required />
+  </label>
+  <!-- Honeypot: people never see this, bots fill it in. -->
+  <input class="wl__hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <button class="btn wl__btn" type="submit" data-cursor="link">
+    <span class="wl__text">Join waitlist</span>
+    <span class="wl__spin" aria-hidden="true"></span>
+    <svg class="wl__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+  </button>
+  <p class="wl__msg" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-waitlist]").forEach((form) => {
+    const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const hp = form.querySelector<HTMLInputElement>('input[name="company"]')!;
+    const btn = form.querySelector<HTMLButtonElement>("button")!;
+    const msg = form.querySelector<HTMLElement>(".wl__msg")!;
+    const endpoint = form.dataset.endpoint || "";
+    let busy = false;
+
+    const set = (state: "" | "loading" | "done" | "error", text = "") => {
+      form.dataset.state = state;
+      btn.disabled = state === "loading" || state === "done";
+      msg.textContent = text;
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      if (!input.value || !input.checkValidity()) {
+        set("error", "That email doesn't look right.");
+        input.focus();
+        return;
+      }
+      if (hp.value) return set("done", "You're on the list.");
+      if (!endpoint) {
+        console.warn("[waitlist] site.waitlistEndpoint is empty; nothing was saved.");
+        return set("error", "Sign-ups open soon. Email hello@ciniapp.com to get on the list.");
+      }
+      busy = true;
+      set("loading");
+      try {
+        // text/plain keeps this a "simple" request (no CORS preflight), which
+        // Apps Script web apps need.
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            email: input.value.trim(),
+            source: form.dataset.source,
+            page: location.pathname,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) throw new Error(data.error || `HTTP ${res.status}`);
+        set("done", "You're on the list. We'll email you when Cini launches.");
+        input.value = "";
+        form.dispatchEvent(new CustomEvent("waitlist:joined", { bubbles: true }));
+      } catch (err) {
+        console.warn("[waitlist] failed:", err);
+        set("error", "Something went wrong. Please try again.");
+      } finally {
+        busy = false;
+      }
+    });
+
+    input.addEventListener("input", () => form.dataset.state === "error" && set(""));
+  });
+</script>
+
+<style>
+  .wl {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .wl__field input {
+    width: 100%;
+    height: 64px;
+    padding: 0 190px 0 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 4px 12px rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    font-size: 16px;
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .wl__field input::placeholder {
+    color: var(--text-3);
+  }
+
+  .wl__field input:focus {
+    border-color: rgba(156, 136, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .wl__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .wl__btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    height: 50px;
+    min-width: 170px;
+  }
+
+  .wl__spin,
+  .wl__check {
+    display: none;
+    width: 22px;
+    height: 22px;
+  }
+
+  .wl__spin {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-ink);
+    border-radius: 50%;
+    animation: wl-spin 0.8s linear infinite;
+  }
+
+  .wl[data-state="loading"] .wl__text,
+  .wl[data-state="done"] .wl__text {
+    display: none;
+  }
+
+  .wl[data-state="loading"] .wl__spin,
+  .wl[data-state="done"] .wl__check {
+    display: block;
+  }
+
+  .wl[data-state="done"] .wl__btn {
+    background: var(--success);
+  }
+
+  .wl[data-state="error"] .wl__field input {
+    border-color: var(--error);
+  }
+
+  .wl__msg {
+    min-height: 1.5em;
+    margin-top: 12px;
+    padding-left: 24px;
+    font-size: 14px;
+    color: var(--text-2);
+  }
+
+  .wl[data-state="error"] .wl__msg {
+    color: #f19aa6;
+  }
+
+  .wl[data-state="done"] .wl__msg {
+    color: var(--success);
+  }
+
+  @keyframes wl-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wl__field input {
+      padding-right: 24px;
+    }
+    .wl__btn {
+      position: static;
+      width: 100%;
+      margin-top: 10px;
+      height: 56px;
+    }
+  }
+</style>

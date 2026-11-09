@@ -1,0 +1,336 @@
+---
+// A coded copy of the app's mood picker ("What's the vibe?"), used inside <Phone>.
+// It is interactive: tap up to two moods. While nobody touches it, it demos itself.
+// Sizes are in cqw so it scales with the phone (Phone sets container-type).
+import { Image } from "astro:assets";
+import { moodById } from "../moods";
+
+// Positions around the circle, matching the app's layout.
+const ring = [
+  { id: "heartfelt", x: 31, y: 18 },
+  { id: "dark", x: 69, y: 18 },
+  { id: "cozy", x: 12, y: 50 },
+  { id: "complex", x: 88, y: 50 },
+  { id: "funny", x: 31, y: 82 },
+  { id: "thrilling", x: 69, y: 82 },
+].map((p) => ({ ...p, mood: moodById[p.id] }));
+
+interface Props {
+  demo?: boolean;
+}
+const { demo = true } = Astro.props;
+---
+
+<div class="ms" data-moodscreen data-demo={demo ? "1" : "0"}>
+  <div class="ms__status" aria-hidden="true">
+    <span>9:41</span>
+    <span class="ms__icons">
+      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" /><rect x="5" y="5.5" width="3" height="6.5" rx="1" /><rect x="10" y="3" width="3" height="9" rx="1" /><rect x="15" y="0" width="3" height="12" rx="1" /></svg>
+      <svg viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5" /><rect x="2" y="2" width="16" height="8" rx="2" /><rect x="24" y="4" width="1.6" height="4" rx=".8" opacity=".5" /></svg>
+    </span>
+  </div>
+
+  <p class="ms__title">What's the vibe?</p>
+  <p class="ms__tab"><span class="ms__radio" aria-hidden="true"></span>pick moods</p>
+
+  <div class="ms__disc" role="group" aria-label="Pick up to two moods">
+    {
+      ring.map(({ id, x, y, mood }) => (
+        <button
+          type="button"
+          class="ms__mood"
+          style={`left:${x}%;top:${y}%`}
+          data-ms-mood={id}
+          aria-pressed="false"
+          data-cursor="image"
+          data-cursor-img={mood.img.src}
+        >
+          <Image src={mood.img} alt="" width={96} class="ms__img" />
+          <span>{mood.label}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="ms__toggle" aria-hidden="true">
+    <span class="is-on">movie</span><span>TV show</span>
+  </div>
+  <a href="#waitlist" class="ms__roll" data-cursor="link">let's roll</a>
+
+  <nav class="ms__nav" aria-hidden="true">
+    <span class="is-on">
+      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /><g fill="#262626"><circle cx="12" cy="6.5" r="2" /><circle cx="12" cy="17.5" r="2" /><circle cx="6.5" cy="12" r="2" /><circle cx="17.5" cy="12" r="2" /><circle cx="12" cy="12" r="1" /></g></svg>
+      home
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" stroke-linecap="round" /></svg>
+      discover
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12v18l-6-4-6 4z" /></svg>
+      watchlist
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5" /><path d="M3.5 21c.8-4.5 4.4-7 8.5-7s7.7 2.5 8.5 7z" /></svg>
+      profile
+    </span>
+  </nav>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-moodscreen]").forEach((screen) => {
+    const buttons = [...screen.querySelectorAll<HTMLButtonElement>("[data-ms-mood]")];
+    let picked: HTMLButtonElement[] = [];
+    let demoOn = screen.dataset.demo === "1" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timer = 0;
+
+    const render = () => {
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(picked.includes(b))));
+      screen.classList.toggle("has-pick", picked.length > 0);
+    };
+    const toggle = (b: HTMLButtonElement) => {
+      if (picked.includes(b)) picked = picked.filter((p) => p !== b);
+      else {
+        picked.push(b);
+        if (picked.length > 2) picked.shift();
+      }
+      b.classList.remove("is-pop");
+      void b.offsetWidth;
+      b.classList.add("is-pop");
+      render();
+    };
+
+    buttons.forEach((b) =>
+      b.addEventListener("click", () => {
+        demoOn = false; // a real visitor took over
+        clearTimeout(timer);
+        toggle(b);
+      })
+    );
+
+    // Self-demo: pick two random moods, pause, clear, repeat. Only while visible.
+    let visible = false;
+    const step = () => {
+      if (!demoOn || !visible) return;
+      if (picked.length >= 2) {
+        picked = [];
+        render();
+        timer = window.setTimeout(step, 900);
+        return;
+      }
+      const pool = buttons.filter((b) => !picked.includes(b));
+      toggle(pool[Math.floor(Math.random() * pool.length)]);
+      timer = window.setTimeout(step, picked.length === 2 ? 2600 : 900);
+    };
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      clearTimeout(timer);
+      if (visible) timer = window.setTimeout(step, 1200);
+    }).observe(screen);
+  });
+</script>
+
+<style>
+  .ms {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #121212;
+    color: #f0f0f0;
+    font-family: var(--font-display);
+    text-align: center;
+  }
+
+  .ms__status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 4.6cqw 8cqw 0 9cqw;
+    font-family: var(--font-body);
+    font-size: 4.1cqw;
+    font-weight: 600;
+  }
+
+  .ms__icons {
+    display: flex;
+    gap: 1.6cqw;
+    align-items: center;
+  }
+
+  .ms__icons svg {
+    height: 3cqw;
+    width: auto;
+    fill: currentColor;
+  }
+
+  .ms__title {
+    margin-top: 9cqw;
+    font-size: 6.6cqw;
+    letter-spacing: -0.02em;
+  }
+
+  .ms__tab {
+    display: flex;
+    align-items: center;
+    gap: 2.4cqw;
+    margin-top: 5cqw;
+    padding-bottom: 2.6cqw;
+    font-size: 3.6cqw;
+    border-bottom: 0.6cqw solid #9c88ff;
+  }
+
+  .ms__radio {
+    width: 3.8cqw;
+    height: 3.8cqw;
+    border-radius: 50%;
+    border: 0.6cqw solid #f0f0f0;
+    box-shadow: inset 0 0 0 0.8cqw #121212;
+    background: #f0f0f0;
+  }
+
+  .ms__disc {
+    position: relative;
+    width: 86cqw;
+    aspect-ratio: 1;
+    margin-top: 8cqw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(156, 136, 255, 0.42), rgba(110, 96, 190, 0.38));
+    box-shadow: inset 0 0 6cqw rgba(0, 0, 0, 0.35);
+  }
+
+  .ms__mood {
+    position: absolute;
+    width: 25cqw;
+    height: 25cqw;
+    translate: -50% -50%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.6cqw;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(315deg, #000 0%, #262626 70%, #353535 100%);
+    box-shadow: 0 1.6cqw 3cqw rgba(0, 0, 0, 0.45);
+    color: #a0a0a0;
+    font-family: var(--font-display);
+    font-size: 3.3cqw;
+    font-weight: 700;
+    transition:
+      box-shadow 0.35s ease,
+      color 0.3s ease,
+      scale 0.45s var(--ease-bounce);
+  }
+
+  .ms__mood:hover {
+    scale: 1.06;
+  }
+
+  .ms__mood[aria-pressed="true"] {
+    color: #f0f0f0;
+    box-shadow:
+      0 0 0 0.9cqw rgba(200, 188, 255, 0.85),
+      0 0 7cqw rgba(156, 136, 255, 0.9);
+  }
+
+  .ms__img {
+    width: 9.5cqw;
+    height: 9.5cqw;
+    object-fit: contain;
+    opacity: 0.75;
+    transition:
+      opacity 0.3s ease,
+      transform 0.45s var(--ease-bounce);
+  }
+
+  .ms__mood[aria-pressed="true"] .ms__img {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+
+  .ms__mood.is-pop {
+    animation: ms-pop 0.5s var(--ease-bounce);
+  }
+
+  @keyframes ms-pop {
+    40% {
+      scale: 0.86;
+    }
+  }
+
+  .ms__toggle {
+    display: flex;
+    margin-top: 9cqw;
+    padding: 1.2cqw;
+    border-radius: 999px;
+    background: #262626;
+    font-size: 3.6cqw;
+  }
+
+  .ms__toggle span {
+    padding: 2.2cqw 4.4cqw;
+    border-radius: 999px;
+    color: #a0a0a0;
+  }
+
+  .ms__toggle .is-on {
+    background: #9c88ff;
+    color: #121212;
+  }
+
+  .ms__roll {
+    display: grid;
+    place-items: center;
+    width: 64cqw;
+    height: 12cqw;
+    margin-top: 4cqw;
+    border-radius: 999px;
+    background: #262626;
+    color: #a0a0a0;
+    font-size: 3.6cqw;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .ms.has-pick .ms__roll {
+    background: #9c88ff;
+    color: #121212;
+  }
+
+  .ms__nav {
+    position: absolute;
+    left: 4cqw;
+    right: 4cqw;
+    bottom: 5cqw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1.6cqw;
+    border-radius: 6cqw;
+    background: rgba(38, 38, 38, 0.92);
+    font-family: var(--font-display);
+    font-size: 3cqw;
+    color: #a0a0a0;
+  }
+
+  .ms__nav span {
+    display: grid;
+    justify-items: center;
+    gap: 0.8cqw;
+    padding: 2cqw 0;
+    border-radius: 5cqw;
+  }
+
+  .ms__nav svg {
+    width: 5.6cqw;
+    height: 5.6cqw;
+  }
+
+  .ms__nav .is-on {
+    background: #4a4a4a;
+    color: #f0f0f0;
+  }
+</style>

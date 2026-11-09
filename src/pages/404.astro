@@ -1,0 +1,110 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import reel from "../assets/3d/reel.png";
+import skull from "../assets/3d/skull.png";
+import complex from "../assets/3d/complex.png";
+---
+
+<Base title="Page not found" description="This page doesn't exist.">
+  <section class="nf">
+    <div class="nf__art" aria-hidden="true">
+      <Image src={skull} alt="" width={220} class="nf__a nf__a--1" />
+      <Image src={reel} alt="" width={320} class="nf__a nf__a--2" />
+      <Image src={complex} alt="" width={220} class="nf__a nf__a--3" />
+    </div>
+    <div class="wrap nf__inner">
+      <p class="nf__code">404</p>
+      <h1 class="h2" data-split>This scene didn't make the final cut.</h1>
+      <p class="lede">The page you're looking for isn't here. Let's get you back to the good part.</p>
+      <div class="nf__actions">
+        <a href="/" class="btn" data-cursor="link" data-magnetic>Back to home</a>
+        <a href="/support" class="btn btn--ghost" data-cursor="link">Get help</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding: 140px 0 80px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .nf__inner {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 22px;
+  }
+
+  .nf__inner .lede {
+    text-align: center;
+  }
+
+  .nf__code {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(120px, 24vw, 300px);
+    line-height: 0.85;
+    letter-spacing: -0.08em;
+    color: transparent;
+    background: linear-gradient(180deg, var(--primary), rgba(156, 136, 255, 0.08));
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .nf__a {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.5));
+    animation: nf-float 8s ease-in-out infinite;
+  }
+
+  .nf__a--1 {
+    width: 110px;
+    left: 10%;
+    top: 22%;
+    rotate: -14deg;
+  }
+
+  .nf__a--2 {
+    width: 160px;
+    right: 8%;
+    top: 16%;
+    rotate: 12deg;
+    animation-delay: -2s;
+  }
+
+  .nf__a--3 {
+    width: 110px;
+    right: 18%;
+    bottom: 12%;
+    animation-delay: -4s;
+  }
+
+  @keyframes nf-float {
+    50% {
+      transform: translateY(-20px) rotate(8deg);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .nf__a {
+      opacity: 0.35;
+    }
+  }
+</style>
