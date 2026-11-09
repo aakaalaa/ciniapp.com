@@ -4,43 +4,43 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import CtaCard from "../components/CtaCard.astro";
 
-import reel from "../assets/3d/reel.png";
-import dna from "../assets/3d/dna.png";
-import bulb from "../assets/3d/bulb.png";
-import gear from "../assets/3d/gear.png";
-import heart from "../assets/3d/heart.png";
-import molecule from "../assets/3d/molecule.png";
+import mixingBoard from "../assets/3d/mixing_board.webp";
+import compass from "../assets/3d/compass.webp";
+import fingerprint from "../assets/3d/fingerprint.webp";
+import mysteryBox from "../assets/3d/mystery_box.webp";
+import retroTv from "../assets/3d/retro_tv.webp";
+import filmGlobe from "../assets/3d/world_film_globe.webp";
 
 // What goes into a pick. The step-by-step flow lives on the homepage tour.
 // Only describe what the app does today (Apple reviews the site against the build).
 const cards = [
   {
-    img: bulb,
+    img: mixingBoard,
     title: "Built on feel, not genre",
     body: "Every title is described by what it's like to watch: its pace, tone and intensity. That's how Cini tells a cozy mystery from a scary one.",
   },
   {
-    img: heart,
+    img: compass,
     title: "Your mood leads",
     body: "The moods you pick shape every pick. Your taste fine-tunes it, but tonight's mood always comes first.",
   },
   {
-    img: dna,
+    img: fingerprint,
     title: "It learns you",
     body: "Start with a few titles, genres and services you love. Every seen, save, skip and rating sharpens the next pick, and earns you Cini Points.",
   },
   {
-    img: molecule,
+    img: mysteryBox,
     title: "Room for surprises",
     body: "A few picks come from outside your usual lane, so you find things you'd never have searched for.",
   },
   {
-    img: gear,
+    img: retroTv,
     title: "Your services first",
     body: "Tell Cini what you subscribe to and see what's streaming on the services you already pay for.",
   },
   {
-    img: reel,
+    img: filmGlobe,
     title: "Every kind of watcher",
     body: "Hollywood, Bollywood, Nollywood, K-drama, anime and more. Tell Cini what you're into.",
   },
@@ -63,7 +63,7 @@ const cards = [
         {
           cards.map((c) => (
             <article class="why__card" data-reveal data-tilt>
-              <Image src={c.img} alt="" width={200} class="why__img" />
+              <Image src={c.img} alt="" widths={[224, 336]} sizes="112px" class="why__img" />
               <h2>{c.title}</h2>
               <p>{c.body}</p>
             </article>
@@ -102,9 +102,9 @@ const cards = [
   }
 
   .why__img {
-    width: 96px;
+    width: 112px;
     height: auto;
-    margin-bottom: 10px;
+    margin: -8px 0 2px -8px;
     filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
     transition: transform 0.6s var(--ease-bounce);
   }
