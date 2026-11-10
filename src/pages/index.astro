@@ -7,6 +7,7 @@ import MoodScreen from "../components/MoodScreen.astro";
 import CtaCard from "../components/CtaCard.astro";
 import PosterCarousel from "../components/PosterCarousel.astro";
 import { moods, moodPairs as pairs } from "../moods";
+import { site } from "../site";
 
 import sTitle from "../assets/screens/title.png";
 import sWatch from "../assets/screens/watch.png";
@@ -41,9 +42,22 @@ const chapters = [
 ];
 
 const tourScreens = chapters.filter((c) => c.screen).map((c) => ({ src: c.screen!, alt: c.alt }));
+
+// Tells search engines Cini is a free iPhone app. Only facts that are true of the shipped app.
+const appSchema = {
+  "@type": "MobileApplication",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  operatingSystem: "iOS",
+  applicationCategory: "EntertainmentApplication",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: { "@id": `${site.url}/#org` },
+  ...(site.store.appStoreUrl ? { installUrl: site.store.appStoreUrl, downloadUrl: site.store.appStoreUrl } : {}),
+};
 ---
 
-<Base>
+<Base schema={[appSchema]}>
   <!-- ============ HERO ============ -->
   <section class="hero" data-hero>
     <div class="wrap hero__grid">

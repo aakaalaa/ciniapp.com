@@ -109,9 +109,28 @@ const groups = [
     ],
   },
 ];
+
+// The same questions and answers as structured data, so search engines and AI answers can read them.
+const plain = (html: string) =>
+  html.replace(/<\/p>\s*<p>/g, " ").replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+const faqSchema = {
+  "@type": "FAQPage",
+  mainEntity: groups.flatMap((g) =>
+    g.items.map((i) => ({
+      "@type": "Question",
+      name: i.q,
+      acceptedAnswer: { "@type": "Answer", text: plain(i.a) },
+    })),
+  ),
+};
 ---
 
-<Base title="Support" description="Get help with Cini: find answers to common questions, or send us a message.">
+<Base
+  title="Help & FAQ"
+  description="Answers to common questions about Cini, the movie and TV recommendation app for iPhone, or send us a message."
+  image="/og/support.png"
+  schema={[faqSchema]}
+>
   <PageHero
     title={`How can we <span class="accent">help?</span>`}
     lede="Find a quick answer below, or send us a message. A real person reads every one."
