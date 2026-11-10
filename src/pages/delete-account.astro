@@ -4,9 +4,6 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import { site } from "../site";
 
-const request = `mailto:${site.email}?subject=${encodeURIComponent("Delete my Cini account")}&body=${encodeURIComponent(
-  "Please delete my Cini account and its data.\n\nMy Cini username:\nThe phone number on my account:\n"
-)}`;
 
 const deleted = [
   "Your account and sign-in link to Apple or Google",
@@ -15,12 +12,13 @@ const deleted = [
   "Your watchlist, seen list and ratings",
   "Your activity in the app, the taste profile Cini built from it, and your Cini Points and credits",
   "Your notification settings and device token",
+  "Messages you've sent to Cini support",
 ];
 
 const kept = [
   "Information we must keep to meet a legal obligation, resolve a dispute or prevent fraud, kept only as long as needed",
   "Copies in our backups, which are overwritten on a rolling basis",
-  "Totals that can't identify you, such as how many people picked a mood",
+  "Totals that can't identify you, such as how many people picked a mood or reported the same problem",
 ];
 ---
 
@@ -54,13 +52,12 @@ const kept = [
         <article class="del__card" data-reveal>
           <span class="del__n">{site.inAppDeletion ? "B" : "1"}</span>
           <div>
-            <h2>{site.inAppDeletion ? "By email" : "Email us"}</h2>
+            <h2>{site.inAppDeletion ? "By message" : "Send us a message"}</h2>
             <p>
-              Send an email to <a href={request}>{site.email}</a> with the subject <strong>Delete my Cini account</strong>. Send it from
-              the email address on your account, or include your Cini username and the phone number on your account so we can find
-              it.
+              <a href={site.messageUrl}>Message us</a> and say <strong>Delete my Cini account</strong>. Use the email address on your
+              account, or include your Cini username and the phone number on your account so we can find it.
             </p>
-            <a class="btn" href={request} data-cursor="link" data-magnetic>Request deletion</a>
+            <a class="btn" href={site.messageUrl} data-cursor="link" data-magnetic>Request deletion</a>
           </div>
         </article>
         <article class="del__card" data-reveal>
@@ -89,7 +86,7 @@ const kept = [
           <ul>{kept.map((d) => <li>{d}</li>)}</ul>
         </div>
         <p class="del__more" data-reveal>
-          Want a copy of your data first, or to delete only some of it? Email <a href={`mailto:${site.email}`}>{site.email}</a>. More
+          Want a copy of your data first, or to delete only some of it? <a href={site.messageUrl}>Message us</a>. More
           in our <a href="/privacy">Privacy Policy</a>.
         </p>
       </div>

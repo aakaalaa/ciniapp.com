@@ -18,7 +18,7 @@ You must be at least 13 years old. If you're under 18, or under the age of major
 - Sign in with your own Apple or Google account, and give us accurate information, including your date of birth.
 - Keep your account to yourself. You're responsible for what happens in it.
 - Pick a username that isn't offensive, misleading or someone else's name or trademark. We may change or remove a username that breaks this rule.
-- Tell us at [hello@ciniapp.com](mailto:hello@ciniapp.com) if you think someone else has used your account.
+- [Message us](/support#message) if you think someone else has used your account.
 
 ## Using Cini
 
@@ -87,7 +87,7 @@ Some places don't allow these limits, so they may not all apply to you. Nothing 
 
 ## Disputes
 
-These terms are governed by the laws of the State of California, USA, without regard to conflict of law rules. Before filing a claim, please email us at [hello@ciniapp.com](mailto:hello@ciniapp.com) so we can try to sort it out. Any claim will be brought in the state or federal courts in California, unless the law where you live gives you the right to bring it locally.
+These terms are governed by the laws of the State of California, USA, without regard to conflict of law rules. Before filing a claim, please [message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) so we can try to sort it out. Any claim will be brought in the state or federal courts in California, unless the law where you live gives you the right to bring it locally.
 
 ## Changes to these terms
 
@@ -95,4 +95,4 @@ We may update these terms as Cini changes. We'll update the date at the top, and
 
 ## Contact us
 
-Questions about these terms? Email [hello@ciniapp.com](mailto:hello@ciniapp.com).
+Questions about these terms? [Message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com).

@@ -74,7 +74,7 @@ const groups = [
       },
       {
         q: "Cini says a title is on a service, but it isn't. Why?",
-        a: `<p>Streaming catalogs change often and differ by country, so availability can be out of date. Tell us at <a href="mailto:${site.email}">${site.email}</a> and we'll look into it.</p>`,
+        a: `<p>Streaming catalogs change often and differ by country, so availability can be out of date. Tell us with the <a href="#message">message form</a> below and we'll look into it.</p>`,
       },
       {
         q: "Where does Cini's movie information come from?",
@@ -104,26 +104,19 @@ const groups = [
       },
       {
         q: "Can I get a copy of my data?",
-        a: `<p>Yes. Email <a href="mailto:${site.email}?subject=${encodeURIComponent("Privacy request")}">${site.email}</a> from the email address on your account and we'll send it to you.</p>`,
+        a: `<p>Yes. <a href="#message">Send us a message</a> using the email address on your account and we'll send it to you.</p>`,
       },
     ],
   },
 ];
 ---
 
-<Base title="Support" description="Get help with Cini: contact us, report a bug, and find answers to common questions.">
+<Base title="Support" description="Get help with Cini: find answers to common questions, or send us a message.">
   <PageHero
     title={`How can we <span class="accent">help?</span>`}
     lede="Find a quick answer below, or send us a message. A real person reads every one."
     art={[gear, bulb, heart]}
-  >
-    <div class="sup__actions" data-reveal>
-      <a class="btn" href="#message" data-cursor="link" data-magnetic>Message us</a>
-      <a class="btn btn--ghost" href={`mailto:${site.email}?subject=${encodeURIComponent("Cini support")}`} data-cursor="link">
-        Email {site.email}
-      </a>
-    </div>
-  </PageHero>
+  />
 
   <section class="sup">
     <div class="wrap sup__grid">
@@ -135,6 +128,7 @@ const groups = [
             </a>
           ))
         }
+        <a class="btn btn--sm sup__nav-msg" href="#message" data-cursor="link">Message us</a>
       </nav>
       <div class="sup__groups">
         {
@@ -158,11 +152,17 @@ const groups = [
 </Base>
 
 <style>
-  .sup__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 8px;
+  /* "Message us" sits last in the topic list, after Privacy, and jumps to the form at the bottom of the page. */
+  .sup__nav .sup__nav-msg {
+    margin-top: 12px;
+    justify-self: start;
+    color: var(--primary-ink);
+    background: var(--primary);
+  }
+
+  .sup__nav .sup__nav-msg:hover {
+    color: var(--primary-ink);
+    background: var(--primary-deep);
   }
 
   .sup {

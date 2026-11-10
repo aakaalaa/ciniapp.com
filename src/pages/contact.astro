@@ -7,36 +7,26 @@ import heart from "../assets/3d/heart.png";
 import molecule from "../assets/3d/molecule.png";
 import tea from "../assets/3d/tea.png";
 
-const mail = (subject: string, to = site.email) => `mailto:${to}?subject=${encodeURIComponent(subject)}`;
-
 const cards = [
   {
     eyebrow: "Help and feedback",
     title: "Questions about the app",
     body: "Something not working, an idea, or just want to say hi.",
-    href: mail("Hello Cini"),
-    email: site.email,
   },
   {
     eyebrow: "Privacy",
     title: "Your data",
     body: "Ask for a copy of your data, a correction, or deletion.",
-    href: mail("Privacy request"),
-    email: site.email,
   },
   {
     eyebrow: "Press and partners",
     title: "Work with us",
     body: "Press, studios, streaming services and creators.",
-    href: mail("Partnership"),
-    email: site.email,
   },
   {
     eyebrow: "Investors",
     title: "Investor relations",
     body: "For conversations about investing in Cini.",
-    href: mail("Investor inquiry", site.investorEmail),
-    email: site.investorEmail,
   },
 ];
 
@@ -46,28 +36,27 @@ const socials = [
 ].filter((s) => s.url);
 ---
 
-<Base title="Contact" description={`Contact Cini at ${site.email}.`}>
+<Base title="Contact" description="Send Cini a message: questions, feedback, privacy requests, press and investors.">
   <PageHero
     title={`Let's <span class="accent">talk.</span>`}
-    lede="We're a small team, so every email lands with a real person. Pick the one that fits."
+    lede="Every message lands with a real person. One form for everything, and we'll reply by email."
     art={[heart, molecule, tea]}
   />
 
   <section class="ct">
     <div class="wrap">
-      <a class="ct__big" href={mail("Hello Cini")} data-reveal data-cursor="label" data-cursor-label="email">
-        <span class="eyebrow">Email us</span>
-        <span class="ct__addr">{site.email}</span>
+      <a class="ct__big" href={site.messageUrl} data-reveal data-cursor="label" data-cursor-label="write">
+        <span class="ct__addr">Message us →</span>
       </a>
 
       <div class="ct__grid">
         {
           cards.map((c) => (
-            <a class="ct__card" href={c.href} data-reveal data-tilt data-cursor="link">
+            <a class="ct__card" href={site.messageUrl} data-reveal data-tilt data-cursor="link">
               <span class="eyebrow">{c.eyebrow}</span>
               <h2>{c.title}</h2>
               <p>{c.body}</p>
-              <span class="ct__email">{c.email} →</span>
+              <span class="ct__email">Message us →</span>
             </a>
           ))
         }

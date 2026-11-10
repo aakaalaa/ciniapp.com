@@ -8,7 +8,9 @@ export const site = {
   description:
     "Cini is a movie and TV recommendation app. Pick your mood and get one great pick in seconds, then send it to your TV.",
 
-  email: "hello@ciniapp.com", // general, support, legal
+  email: "hello@ciniapp.com", // shown only where the law asks for an email address (Privacy Policy, Terms)
+  // Every other "contact us" on the site points here: the Message us form at the bottom of Support.
+  messageUrl: "/support#message",
   investorEmail: "abimbola@ciniapp.com",
 
   // Leave a link empty ("") to hide that icon. Never ship a dead link.

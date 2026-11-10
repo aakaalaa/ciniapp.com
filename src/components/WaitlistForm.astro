@@ -50,7 +50,7 @@ const { source = "home" } = Astro.props;
       if (hp.value) return set("done", "You're on the list.");
       if (!endpoint) {
         console.warn("[waitlist] site.waitlistEndpoint is empty; nothing was saved.");
-        return set("error", "Sign-ups open soon. Email hello@ciniapp.com to get on the list.");
+        return set("error", "Sign-ups open soon. Message us at ciniapp.com/support to get on the list.");
       }
       busy = true;
       set("loading");
