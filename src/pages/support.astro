@@ -249,9 +249,19 @@ const groups = [
       position: static;
       display: flex;
       flex-wrap: wrap;
+      /* Chips keep their own height instead of stretching to the tallest one in the row. */
+      align-items: center;
     }
     .sup__nav a {
       background: rgba(255, 255, 255, 0.05);
+    }
+    /* Same size as the topic chips; only the colour sets it apart. */
+    .sup__nav .sup__nav-msg {
+      margin-top: 0;
+      padding: 10px 16px;
+      font-size: 15px;
+      line-height: inherit;
+      min-height: 0;
     }
   }
 </style>
