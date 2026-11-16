@@ -1,7 +1,31 @@
 {
-  "updated": "2026-11-09",
+  "updated": "2026-11-16",
   "source": "TMDB weekly trending, Rotten Tomatoes 70%+ via MDBList",
   "titles": [
+    {
+      "id": 1368337,
+      "type": "movie",
+      "title": "The Odyssey",
+      "year": 2026,
+      "rt": 94,
+      "poster": "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg"
+    },
+    {
+      "id": 213375,
+      "type": "tv",
+      "title": "VisionQuest",
+      "year": 2026,
+      "rt": 86,
+      "poster": "/WGyAyBPncfuu8MZhLY9RtfZPM0.jpg"
+    },
+    {
+      "id": 84773,
+      "type": "tv",
+      "title": "The Lord of the Rings: The Rings of Power",
+      "year": 2022,
+      "rt": 82,
+      "poster": "/bMXWXKM9ydUmMTNvDnYo9QtCBRt.jpg"
+    },
     {
       "id": 1423191,
       "type": "movie",
@@ -11,36 +35,12 @@
       "poster": "/gAgWJhUSQWCgtKR8170nMkYlBda.jpg"
     },
     {
-      "id": 1368337,
+      "id": 1381071,
       "type": "movie",
-      "title": "The Odyssey",
+      "title": "Godzilla Minus Zero",
       "year": 2026,
-      "rt": 94,
-      "poster": "/krVa7rKCQb4OBfsr2LTJv4rTz5q.jpg"
-    },
-    {
-      "id": 1263337,
-      "type": "movie",
-      "title": "Heart of the Beast",
-      "year": 2026,
-      "rt": 84,
-      "poster": "/6sYemVUn79UPKz1ZsSG6kPU4RVy.jpg"
-    },
-    {
-      "id": 247718,
-      "type": "tv",
-      "title": "MobLand",
-      "year": 2025,
-      "rt": 83,
-      "poster": "/5Xc7WpWsgflfgEMoBlf9TmWhfbH.jpg"
-    },
-    {
-      "id": 225385,
-      "type": "tv",
-      "title": "Black Doves",
-      "year": 2024,
-      "rt": 92,
-      "poster": "/srlsyEfIBz2MNWBndVc3opOaNGS.jpg"
+      "rt": 91,
+      "poster": "/hSmIJluOJmTWvJs4d7kHRxjc8s8.jpg"
     }
   ]
 }
