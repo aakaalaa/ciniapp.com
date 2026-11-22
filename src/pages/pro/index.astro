@@ -1,0 +1,120 @@
+---
+// Where Stripe sends people who leave checkout without finishing, and where the billing portal returns to.
+// Not linked from the nav and kept out of search: people only arrive here from the app.
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import { site } from "../../site";
+
+const { trialDays, monthly, yearly } = site.pro;
+
+const facts = [
+  `Try Cini free for ${trialDays} days. A card is needed to start, and nothing is charged until the trial ends.`,
+  `After the trial: ${monthly} a month or ${yearly} a year. Cancel any time before it ends and you pay nothing.`,
+  "Manage or cancel your plan in the app: Profile → Settings → Manage plan.",
+];
+---
+
+<Base
+  title="Your Cini plan"
+  description="Start your Cini free trial, or manage the plan you already have."
+  noindex
+>
+  <PageHero
+    title={`Back to <span class="accent">Cini.</span>`}
+    lede="Head back to the app to start your trial or manage your plan. If you closed checkout early, nothing was charged."
+    compact
+  />
+
+  <section class="pro">
+    <div class="wrap pro__grid">
+      <article class="pro__card" data-reveal>
+        <h2>How your plan works</h2>
+        <ul>{facts.map((f) => <li>{f}</li>)}</ul>
+      </article>
+      <article class="pro__card" data-reveal>
+        <h2>Open the app</h2>
+        <p>
+          Open Cini on your phone and tap <strong>Subscribe</strong> to start again. Changes to your plan show up in the app the next
+          time you open it.
+        </p>
+        <p class="pro__help">
+          Something not right, or charged when you didn't expect it? <a href={site.messageUrl}>Message us</a> and we'll sort it out.
+        </p>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pro {
+    padding: 20px 0 140px;
+  }
+
+  .pro__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .pro__card {
+    display: grid;
+    gap: 16px;
+    padding: 30px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+    color: var(--text-2);
+  }
+
+  .pro__card h2 {
+    font-size: 26px;
+    color: var(--text);
+  }
+
+  .pro__card ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .pro__card li {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .pro__card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--success)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23121212' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E")
+      center / 12px no-repeat;
+  }
+
+  .pro strong {
+    color: var(--text);
+  }
+
+  .pro__help {
+    font-size: 15px;
+  }
+
+  .pro a {
+    color: var(--primary-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .pro__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

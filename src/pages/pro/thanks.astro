@@ -1,0 +1,100 @@
+---
+// Where Stripe sends people after a successful checkout. Only reached from the app, so kept out of search.
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import { site } from "../../site";
+
+const { trialDays, monthly, yearly } = site.pro;
+
+const next = [
+  "Open the Cini app. Your plan is switched on within a moment of checkout finishing.",
+  `Your free trial runs ${trialDays} days. You're charged ${monthly} a month or ${yearly} a year only when it ends.`,
+  "To cancel, go to Profile → Settings → Manage plan before the trial ends. A receipt is emailed to you by Stripe.",
+];
+---
+
+<Base
+  title="You're in"
+  description="Your Cini plan is set up. Here's what happens next."
+  noindex
+>
+  <PageHero
+    title={`You're <span class="accent">in.</span>`}
+    lede="Thanks for starting your Cini plan. Head back to the app and pick something to watch."
+    compact
+  />
+
+  <section class="thx">
+    <div class="wrap">
+      <article class="thx__card" data-reveal>
+        <h2>What happens next</h2>
+        <ol>
+          {next.map((n, i) => <li><span class="thx__n">{i + 1}</span><span>{n}</span></li>)}
+        </ol>
+        <p class="thx__help">
+          Not seeing your plan in the app after a few minutes? Close and reopen Cini, then <a href={site.messageUrl}>message us</a> if
+          it's still missing.
+        </p>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thx {
+    padding: 20px 0 140px;
+  }
+
+  .thx__card {
+    display: grid;
+    gap: 20px;
+    max-width: 720px;
+    padding: 30px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+    color: var(--text-2);
+  }
+
+  .thx__card h2 {
+    font-size: 26px;
+    color: var(--text);
+  }
+
+  .thx__card ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 16px;
+  }
+
+  .thx__card li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .thx__n {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--primary-ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .thx__help {
+    font-size: 15px;
+  }
+
+  .thx a {
+    color: var(--primary-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

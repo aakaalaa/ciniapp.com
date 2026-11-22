@@ -34,6 +34,13 @@ export const site = {
     minAge: 13,
   },
 
+  // Cini's paid plan. Used by /pro and /pro/thanks (Stripe sends people back to these pages). Keep in step with the Stripe prices.
+  pro: {
+    trialDays: 7,
+    monthly: "$4.99",
+    yearly: "$44.99",
+  },
+
   // Flip to true once Profile > Settings > Delete account exists in the app.
   // (Apple requires in-app deletion before review.)
   inAppDeletion: false,
