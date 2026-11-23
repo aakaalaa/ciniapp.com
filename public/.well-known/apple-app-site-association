@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "8R23YG8566.app.cini",
+        "paths": [
+          "/titleSpotlight",
+          "/titleSpotlight/*",
+          "/invite",
+          "/invite/*"
+        ]
+      }
+    ]
+  }
+}
