@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-16",
+  "updated": "2026-11-24",
   "source": "TMDB weekly trending, Rotten Tomatoes 70%+ via MDBList",
   "titles": [
     {
@@ -11,36 +11,36 @@
       "poster": "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg"
     },
     {
-      "id": 213375,
-      "type": "tv",
-      "title": "VisionQuest",
+      "id": 1595124,
+      "type": "movie",
+      "title": "Steps",
       "year": 2026,
-      "rt": 86,
-      "poster": "/WGyAyBPncfuu8MZhLY9RtfZPM0.jpg"
+      "rt": 75,
+      "poster": "/jtfCcWZ3ZyKdgi0u7JVOxEOSSJP.jpg"
+    },
+    {
+      "id": 969681,
+      "type": "movie",
+      "title": "Spider-Man: Brand New Day",
+      "year": 2026,
+      "rt": 90,
+      "poster": "/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg"
+    },
+    {
+      "id": 247718,
+      "type": "tv",
+      "title": "MobLand",
+      "year": 2025,
+      "rt": 83,
+      "poster": "/5Xc7WpWsgflfgEMoBlf9TmWhfbH.jpg"
     },
     {
       "id": 84773,
       "type": "tv",
       "title": "The Lord of the Rings: The Rings of Power",
       "year": 2022,
-      "rt": 82,
+      "rt": 84,
       "poster": "/bMXWXKM9ydUmMTNvDnYo9QtCBRt.jpg"
-    },
-    {
-      "id": 1423191,
-      "type": "movie",
-      "title": "Resident Evil",
-      "year": 2026,
-      "rt": 96,
-      "poster": "/gAgWJhUSQWCgtKR8170nMkYlBda.jpg"
-    },
-    {
-      "id": 1381071,
-      "type": "movie",
-      "title": "Godzilla Minus Zero",
-      "year": 2026,
-      "rt": 91,
-      "poster": "/hSmIJluOJmTWvJs4d7kHRxjc8s8.jpg"
     }
   ]
 }
