@@ -1,0 +1,83 @@
+---
+// Where a friend's text invite lands (https://ciniapp.com/invite?ref=<uid>). One link for every phone: iPhones go to the
+// App Store, Android phones to the Play Store, anything else sees both buttons. A store with no listing yet (empty URL in
+// site.invite) is never linked: that phone gets the waitlist instead. Never ship a dead link.
+// iPhones that already have Cini open the app straight from this link (Universal Links, public/.well-known).
+// The ref is only passed along to the Play Store's install referrer; it is never shown on the page.
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { site } from "../site";
+
+const { appStoreUrl, appStoreId, playStoreUrl } = site.invite;
+---
+
+<Base
+  title="Join Cini"
+  description="A friend invited you to Cini. Pick your mood and find what to watch."
+  noindex
+  appleAppId={appStoreId}
+>
+  <PageHero
+    title={`A friend invited <span class="accent">you.</span>`}
+    lede="Movie and TV picks for your mood, sent straight to your TV."
+    compact
+  />
+
+  <section class="inv">
+    <div class="wrap">
+      <div class="inv__row" data-reveal>
+        {appStoreUrl && <a class="inv__btn" href={appStoreUrl}>Get Cini on the App Store</a>}
+        {playStoreUrl
+          ? <a class="inv__btn" href={playStoreUrl}>Get Cini on Google Play</a>
+          : <a class="inv__btn inv__btn--ghost" href="/#waitlist">Android? Join the waitlist</a>}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline define:vars={{ appStoreUrl, playStoreUrl }}>
+  // Send phones to their store. Desktop and unknown devices stay on the page. An Android phone with no Play listing yet
+  // stays too, and sees the waitlist button.
+  var ua = navigator.userAgent || "";
+  var ref = new URLSearchParams(location.search).get("ref") || "";
+  var safeRef = /^[A-Za-z0-9_-]{1,128}$/.test(ref) ? ref : "";
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  if (isIOS && appStoreUrl) {
+    location.replace(appStoreUrl);
+  } else if (isAndroid && playStoreUrl) {
+    var url = playStoreUrl;
+    if (safeRef) url += (url.indexOf("?") > -1 ? "&" : "?") + "referrer=" + encodeURIComponent("ref=" + safeRef);
+    location.replace(url);
+  }
+</script>
+
+<style>
+  .inv {
+    padding: 20px 0 160px;
+  }
+
+  .inv__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .inv__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 0 28px;
+    border-radius: 999px;
+    background: #8282f2;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .inv__btn--ghost {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+</style>

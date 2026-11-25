@@ -13,9 +13,11 @@ interface Props {
   schema?: Record<string, unknown>[];
   /** Keep this page out of search results (404). */
   noindex?: boolean;
+  /** App Store id: shows Safari's smart app banner. */
+  appleAppId?: string;
 }
 
-const { title, description = site.description, image = "/og/default.png", schema = [], noindex = false } = Astro.props;
+const { title, description = site.description, image = "/og/default.png", schema = [], noindex = false, appleAppId = "" } = Astro.props;
 // The home page title is written for search: what people type, then the brand.
 const fullTitle = title ? `${title} | Cini` : "What to Watch Tonight? Movie & TV Picks by Mood | Cini";
 const canonical = new URL(Astro.url.pathname, site.url).href;
@@ -57,6 +59,7 @@ const jsonLd = {
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0c0c0e" />
+    {appleAppId && <meta name="apple-itunes-app" content={`app-id=${appleAppId}`} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cini" />
     <meta property="og:locale" content="en_US" />

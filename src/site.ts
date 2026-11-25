@@ -26,6 +26,14 @@ export const site = {
     playStoreUrl: "",
   },
 
+  // Where /invite (the link in a friend's text) sends people. Kept apart from `store` so the rest of the site keeps saying
+  // "coming soon" until launch. Leave a URL empty ("") until its listing is live: that phone then gets the waitlist.
+  invite: {
+    appStoreUrl: "https://apps.apple.com/app/id6767471170",
+    appStoreId: "6767471170", // for Safari's smart app banner
+    playStoreUrl: "",
+  },
+
   // Legal. Who provides Cini until an LLC exists, and which law governs the Terms.
   legal: {
     provider: "Abimbola Akala, doing business as Cini",
