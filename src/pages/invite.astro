@@ -1,0 +1,79 @@
+---
+// Where a friend's text invite lands (https://ciniapp.com/invite?ref=<uid>). One link for every phone: iPhones go to the
+// App Store, Android phones to the Play Store, anything else gets a page. Until the store listings exist (site.store.status
+// is "coming-soon") nobody is redirected: the page sends them to the waitlist instead. Never ship a dead link.
+// The ref is only passed along to the Play Store's install referrer; it is never shown on the page.
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { site } from "../site";
+
+const live = site.store.status === "live";
+const { appStoreUrl, playStoreUrl } = site.store;
+---
+
+<Base
+  title="Join Cini"
+  description="A friend invited you to Cini. Pick your mood and find what to watch."
+  noindex
+>
+  <PageHero
+    title={`A friend invited <span class="accent">you.</span>`}
+    lede={live
+      ? "Get Cini and find what to watch together."
+      : "Cini is coming soon. Join the waitlist and we'll tell you the day it launches."}
+    compact
+  />
+
+  <section class="inv">
+    <div class="wrap">
+      <div class="inv__row" data-reveal>
+        {live && appStoreUrl && <a class="inv__btn" id="inv-ios" href={appStoreUrl}>App Store</a>}
+        {live && playStoreUrl && <a class="inv__btn" id="inv-android" href={playStoreUrl}>Google Play</a>}
+        {!live && <a class="inv__btn" href="/#waitlist">Join the waitlist</a>}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline define:vars={{ live, appStoreUrl, playStoreUrl }}>
+  // Redirect by phone. Desktop and unknown devices stay on the page with both buttons.
+  if (live) {
+    var ua = navigator.userAgent || "";
+    var ref = new URLSearchParams(location.search).get("ref") || "";
+    var safeRef = /^[A-Za-z0-9_-]{1,128}$/.test(ref) ? ref : "";
+    var isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var isAndroid = /Android/i.test(ua);
+    if (isIOS && appStoreUrl) {
+      location.replace(appStoreUrl);
+    } else if (isAndroid && playStoreUrl) {
+      var url = playStoreUrl;
+      if (safeRef) url += (url.indexOf("?") > -1 ? "&" : "?") + "referrer=" + encodeURIComponent("ref=" + safeRef);
+      location.replace(url);
+    }
+  }
+</script>
+
+<style>
+  .inv {
+    padding: 20px 0 160px;
+  }
+
+  .inv__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .inv__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 0 28px;
+    border-radius: 999px;
+    background: var(--accent, #8282f2);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>
