@@ -66,8 +66,8 @@ export const site = {
 };
 
 export const nav = [
-  { href: "/how-it-works", label: "how it works" },
   { href: "/about", label: "about" },
+  { href: "/how-it-works", label: "how it works" },
   { href: "/contact", label: "contact" },
 ];
 

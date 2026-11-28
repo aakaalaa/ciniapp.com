@@ -7,14 +7,21 @@ import { site } from "../site";
 
 import founder from "../assets/people/founder.jpg";
 
-// The tedious way to find something to watch, as a flowchart. Black and white on purpose: it is the "before".
+// The "before": the tedious way to find something to watch, as a red flowchart. Below it, the "after": what cini does.
 // Icons: Lucide (https://lucide.dev, ISC licence) except scroll, tired and thumbs-down, which are the owner's own images in public/flow/.
 const icons: Record<string, string> = {
   "screen": "<path d=\"M10 7.75a.75.75 0 0 1 1.142-.638l3.664 2.249a.75.75 0 0 1 0 1.278l-3.664 2.25a.75.75 0 0 1-1.142-.64z\" /> <path d=\"M12 17v4\" /> <path d=\"M8 21h8\" /> <rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\" />",
   "apps": "<rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\" />",
   "clap": "<path d=\"M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z\" /> <path d=\"m6.2 5.3 3.1 3.9\" /> <path d=\"m12.4 3.4 3.1 4\" /> <path d=\"M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z\" />",
   "found": "<path d=\"m8 11 2 2 4-4\" /> <circle cx=\"11\" cy=\"11\" r=\"8\" /> <path d=\"m21 21-4.3-4.3\" />",
-  "pizza": "<path d=\"m12 14-1 1\" /> <path d=\"m13.75 18.25-1.25 1.42\" /> <path d=\"M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12\" /> <path d=\"M18.8 9.3a1 1 0 0 0 2.1 7.7\" /> <path d=\"M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z\" />"
+  "pizza": "<path d=\"m12 14-1 1\" /> <path d=\"m13.75 18.25-1.25 1.42\" /> <path d=\"M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12\" /> <path d=\"M18.8 9.3a1 1 0 0 0 2.1 7.7\" /> <path d=\"M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z\" />",
+  "mood": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"M8 14s1.5 2 4 2 4-2 4-2\" /> <line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\" /> <line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\" />",
+  "taste": "<path d=\"M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4\" /> <path d=\"M14 13.12c0 2.38 0 6.38-1 8.88\" /> <path d=\"M17.29 21.02c.12-.6.43-2.3.5-3.02\" /> <path d=\"M2 12a10 10 0 0 1 18-6\" /> <path d=\"M2 16h.01\" /> <path d=\"M21.8 16c.2-2 .131-5.354 0-6\" /> <path d=\"M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2\" /> <path d=\"M8.65 22c.21-.66.45-1.32.57-2\" /> <path d=\"M9 6.8a6 6 0 0 1 9 5.2v2\" />",
+  "tonight": "<line x1=\"21\" x2=\"14\" y1=\"4\" y2=\"4\" /> <line x1=\"10\" x2=\"3\" y1=\"4\" y2=\"4\" /> <line x1=\"21\" x2=\"12\" y1=\"12\" y2=\"12\" /> <line x1=\"8\" x2=\"3\" y1=\"12\" y2=\"12\" /> <line x1=\"21\" x2=\"16\" y1=\"20\" y2=\"20\" /> <line x1=\"12\" x2=\"3\" y1=\"20\" y2=\"20\" /> <line x1=\"14\" x2=\"14\" y1=\"2\" y2=\"6\" /> <line x1=\"8\" x2=\"8\" y1=\"10\" y2=\"14\" /> <line x1=\"16\" x2=\"16\" y1=\"18\" y2=\"22\" />",
+  "prefs": "<path d=\"m3 17 2 2 4-4\" /> <path d=\"m3 7 2 2 4-4\" /> <path d=\"M13 6h8\" /> <path d=\"M13 12h8\" /> <path d=\"M13 18h8\" />",
+  "timer": "<line x1=\"10\" x2=\"14\" y1=\"2\" y2=\"2\" /> <line x1=\"12\" x2=\"15\" y1=\"14\" y2=\"11\" /> <circle cx=\"12\" cy=\"14\" r=\"8\" />",
+  "tv": "<rect width=\"20\" height=\"15\" x=\"2\" y=\"7\" rx=\"2\" ry=\"2\" /> <polyline points=\"17 2 12 7 7 2\" />",
+  "choose": "<path d=\"M14 4.1 12 6\" /> <path d=\"m5.1 8-2.9-.8\" /> <path d=\"m6 12-1.9 2\" /> <path d=\"M7.2 2.2 8 5.1\" /> <path d=\"M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z\" />"
 };
 const steps = [
   { icon: "screen", text: "you open a streaming app" },
@@ -25,10 +32,17 @@ const steps = [
   { icon: "scroll", text: "you scroll some more" },
   { icon: "found", text: "you finally find something" },
 ];
+// What happens inside cini. The user never sees or touches this part.
+const inside = [
+  { icon: "tonight", text: "collects tonight's mood" },
+  { icon: "taste", text: "takes in your taste profile" },
+  { icon: "prefs", text: "understands your preferences" },
+  { icon: "found", text: "selects your perfect watch" },
+];
 const outcomes = [
   { icon: "pizza", text: "your food is cold" },
   { icon: "tired", text: "you're too tired to watch" },
-  { icon: "thumbs-down", text: "it wasn't even that good" },
+  { icon: "thumbs-down", text: "the movie wasn't even that good" },
 ];
 ---
 
@@ -37,10 +51,7 @@ const outcomes = [
   image="/og/about.png"
   description="Cini is an independent app that helps you stop scrolling and start watching. Meet the team and the idea behind it."
 >
-  <PageHero
-    long
-    title="cini is a small, independent app with one job: help you find something great to watch, fast."
-  />
+  <PageHero long title={`how you probably watch tv <span style="color:#e0475a">today</span>`} />
 
   <!-- The old way, as a flowchart -->
   <section class="flow" data-flow>
@@ -74,12 +85,51 @@ const outcomes = [
   </section>
 
   <!-- Our answer -->
-  <section class="story">
+  <section class="after" data-after>
     <div class="wrap">
-      <p class="story__text" data-scrub>
-        So we built cini around a different question: how do you feel tonight? Tell us, and we'll hand you one great pick that fits
-        your mood, your taste and the services you already pay for.
-      </p>
+      <p class="after__q" data-scrub>So we built cini around a different question: how do you feel tonight?</p>
+      <p class="after__sub">A small, independent app with one job: help you find something great to watch, fast.</p>
+
+      <div class="pipe">
+        <div class="pipe__user pipe__user--a">
+          <span class="pipe__ico" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={icons.mood} /></span>
+          <span>you pick your mood</span>
+        </div>
+        <span class="pipe__link pipe__link--a" aria-hidden="true"></span>
+
+        <div class="pipe__core">
+          <div class="pipe__head">
+            <span class="pipe__tag">behind the scenes</span>
+          </div>
+          <ol class="pipe__mods">
+            {
+              inside.map((m, i) => (
+                <li class="pipe__mod" style={`--m:${i}`}>
+                  <span class="pipe__mico" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={icons[m.icon]} /></span>
+                  <span class="pipe__mtext">{m.text}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="pipe__out">
+          <span class="pipe__link pipe__link--b" aria-hidden="true"></span>
+          <div class="pipe__user pipe__user--b">
+            <span class="pipe__ico" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={icons.choose} /></span>
+            <span>you choose to watch it</span>
+          </div>
+          <span class="pipe__link pipe__link--c" aria-hidden="true"></span>
+          <div class="pipe__user pipe__user--c">
+            <span class="pipe__ico" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={icons.tv} /></span>
+            <span>it launches on your tv</span>
+          </div>
+        </div>
+
+        <div class="pipe__span">
+          <span class="pipe__time"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={icons.timer} />45 seconds, start to finish</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -133,21 +183,348 @@ const outcomes = [
 </Base>
 
 <style>
-  .story {
-    padding: clamp(40px, 8vh, 90px) 0 clamp(70px, 11vh, 130px);
+  /* ---- The "after": the black pills are what the user does; the dark technical panel between them is cini's own work. ---- */
+  .after {
+    padding: clamp(50px, 9vh, 110px) 0 clamp(60px, 10vh, 120px);
   }
 
-  .story__text {
+  .after__q {
     font-family: var(--font-display);
     font-size: clamp(26px, 3.6vw, 48px);
     line-height: 1.2;
     letter-spacing: -0.03em;
-    max-width: 30ch;
+    max-width: 24ch;
   }
 
-  /* ---- The old way: a black-and-white flowchart. One wave line, one pill on each vertical stroke. No purple on purpose. ---- */
+  .after__sub {
+    margin: 18px 0 clamp(36px, 6vh, 64px);
+    max-width: 46ch;
+    font-size: clamp(17px, 1.5vw, 21px);
+    color: var(--text-2);
+  }
+
+  .pipe {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0;
+  }
+
+  .pipe__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 28px 18px 18px;
+    border-radius: 999px;
+    background: #fff;
+    color: #1c1b22;
+    font-family: var(--font-display);
+    font-size: clamp(17px, 1.5vw, 20px);
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 22px 40px -22px rgba(0, 0, 0, 0.9);
+  }
+
+  .pipe__ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1c1b22;
+    color: #fff;
+  }
+
+  .pipe__ico svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* where they land: cini's own purple */
+  .pipe__user--c {
+    background: var(--primary);
+    color: var(--primary-ink);
+    box-shadow: 0 5px 0 var(--primary-deep), 0 22px 40px -22px rgba(156, 136, 255, 0.55);
+  }
+
+  .pipe__user--c .pipe__ico {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .pipe__link {
+    display: block;
+    width: 2px;
+    height: 38px;
+    background: var(--primary);
+    transform-origin: top;
+  }
+
+  .pipe__out {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pipe__out .pipe__link {
+    align-self: center;
+  }
+
+  /* The technical part: dark, on a faint blueprint grid, with a scanning light. */
+  .pipe__core {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px 20px 22px;
+    border-radius: 28px;
+    background-color: #101013;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.075) 1px, transparent 1.6px);
+    background-size: 18px 18px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 56px -28px rgba(0, 0, 0, 0.95);
+    overflow: hidden;
+  }
+
+  .pipe__core::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 35%, rgba(156, 136, 255, 0.1) 50%, transparent 65%);
+    transform: translateX(-100%);
+    animation: pipe-scan 5.5s ease-in-out 2s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pipe-scan {
+    55%, 100% { transform: translateX(100%); }
+  }
+
+  .pipe__head {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .pipe__mico svg,
+  .pipe__time svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pipe__tag {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--text-3);
+  }
+
+  .pipe__mods {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pipe__mod {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 44px 14px 14px;
+    border-radius: 14px;
+    background: #1a1a1f;
+    color: #e4e4e8;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 14.5px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .pipe__mico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    color: #fff;
+  }
+
+  /* a green tick once each block is done */
+  .pipe__mod::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 7px;
+    height: 12px;
+    border-right: 2px solid #7be0a2;
+    border-bottom: 2px solid #7be0a2;
+    transform: translateY(-62%) rotate(40deg);
+  }
+
+  /* how long the whole thing takes, from picking a mood to pressing play */
+  .pipe__span {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .pipe__time svg {
+    color: #fff;
+  }
+
+  .pipe__time {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px 9px 12px;
+    border-radius: 999px;
+    background: #221d3d;
+    color: var(--primary-2);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* Plays once when it scrolls into view: pill, line, then the blocks build one by one, then the choice, then the TV. */
+  :global(html.motion) .pipe__user,
+  :global(html.motion) .pipe__core,
+  :global(html.motion) .pipe__span {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s var(--ease-out);
+  }
+
+  :global(html.motion) .pipe__core {
+    transition-delay: 1.1s;
+  }
+
+  :global(html.motion) .pipe__user--b {
+    transition-delay: 5.4s;
+  }
+
+  :global(html.motion) .pipe__user--c {
+    transition-delay: 6.4s;
+  }
+
+  :global(html.motion) .pipe__span {
+    transition-delay: 7s;
+  }
+
+  :global(html.motion) .pipe__link {
+    transform: scaleY(0);
+    transition: transform 0.5s ease;
+  }
+
+  :global(html.motion) .pipe__link--a {
+    transition-delay: 0.55s;
+  }
+
+  :global(html.motion) .pipe__link--b {
+    transition-delay: 4.9s;
+  }
+
+  :global(html.motion) .pipe__link--c {
+    transition-delay: 5.9s;
+  }
+
+  :global(html.motion) .pipe__mod {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.97);
+    transition:
+      opacity 0.35s ease,
+      transform 0.5s var(--ease-bounce);
+    transition-delay: calc(1.6s + var(--m, 0) * 0.85s);
+  }
+
+  :global(html.motion) .pipe__mod::after {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    transition-delay: calc(2.2s + var(--m, 0) * 0.85s);
+  }
+
+  :global(html.motion) .after.is-live .pipe__user,
+  :global(html.motion) .after.is-live .pipe__core,
+  :global(html.motion) .after.is-live .pipe__span,
+  :global(html.motion) .after.is-live .pipe__mod {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(html.motion) .after.is-live .pipe__link {
+    transform: scaleY(1);
+  }
+
+  :global(html.motion) .after.is-live .pipe__mod::after {
+    opacity: 1;
+  }
+
+  /* Wide screens: left to right, with the choice and the TV stacked on the right. */
+  @media (min-width: 1000px) {
+    .pipe {
+      grid-template-columns: auto 56px minmax(0, 440px) auto;
+      justify-content: start;
+      align-items: center;
+      justify-items: stretch;
+    }
+    .pipe__link--a {
+      width: 100%;
+      height: 2px;
+      transform-origin: left;
+    }
+    .pipe__out {
+      position: relative;
+      margin-left: 56px;
+    }
+    .pipe__link--b {
+      position: absolute;
+      right: 100%;
+      top: 37px;
+      width: 56px;
+      height: 2px;
+      align-self: auto;
+      transform-origin: left;
+    }
+    :global(html.motion) .pipe__link--a,
+    :global(html.motion) .pipe__link--b {
+      transform: scaleX(0);
+    }
+    :global(html.motion) .after.is-live .pipe__link--a,
+    :global(html.motion) .after.is-live .pipe__link--b {
+      transform: scaleX(1);
+    }
+    /* a bracket under the whole flow, with the time in the middle */
+    .pipe__span {
+      grid-column: 1 / -1;
+    }
+    .pipe__span::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(var(--primary), var(--primary)) center / 100% 2px no-repeat,
+        linear-gradient(var(--primary), var(--primary)) left center / 2px 18px no-repeat,
+        linear-gradient(var(--primary), var(--primary)) right center / 2px 18px no-repeat;
+    }
+  }
+
+  /* ---- The "before": a flowchart in red. One wave line, one pill on each vertical stroke. No purple on purpose. ---- */
   .flow {
+    --before: #e0475a;
     padding: 10px 0 clamp(30px, 6vh, 70px);
+    background: radial-gradient(55% 75% at 50% 45%, rgba(176, 30, 52, 0.16), transparent 72%);
   }
 
   .flow__chart {
@@ -237,7 +614,7 @@ const outcomes = [
     top: 100%;
     width: 2px;
     height: 34px;
-    background: var(--primary);
+    background: var(--before);
     transform: translateX(-50%);
   }
 
@@ -269,13 +646,13 @@ const outcomes = [
 
   .flow :global(.flow__svg .wave) {
     fill: none;
-    stroke: var(--primary);
+    stroke: var(--before);
     stroke-width: 2;
     stroke-linecap: round;
   }
 
   .flow :global(.flow__svg .dot) {
-    fill: var(--primary);
+    fill: var(--before);
   }
 
   /* Plays once when the chart scrolls into view: the line draws along the wave and each pill appears as it arrives. */
@@ -551,6 +928,25 @@ const outcomes = [
       );
       if (wide.matches) io.observe(flow);
       else items.forEach((el) => io.observe(el));
+    }
+  }
+
+  // The "after" flow plays once when it comes into view; the technical blocks then build one by one.
+  const after = document.querySelector<HTMLElement>("[data-after]");
+  if (after) {
+    if (!document.documentElement.classList.contains("motion") || !("IntersectionObserver" in window)) {
+      after.classList.add("is-live");
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            after.classList.add("is-live");
+            io.disconnect();
+          }
+        },
+        { rootMargin: "0px 0px -20% 0px", threshold: 0.15 },
+      );
+      io.observe(after.querySelector(".pipe")!);
     }
   }
 </script>
