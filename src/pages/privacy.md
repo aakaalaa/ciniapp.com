@@ -20,7 +20,7 @@ summary: "<strong>The short version:</strong> Cini uses what you tell it and wha
 
 Cini is a movie and TV recommendation app for iPhone, provided by Abimbola Akala, doing business as Cini ("Cini", "we", "us"). This policy covers the Cini app and the website at ciniapp.com.
 
-If you have a question about this policy or your data, [message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com).
+If you have a question about this policy or your data, [message us](/contact#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com).
 
 ## What we collect
 
@@ -91,12 +91,12 @@ Beta sign-ups are kept until the beta ends, or until you ask us to remove yours.
 
 ## Your choices and rights
 
-- **See or copy your data.** [Message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) for a copy.
+- **See or copy your data.** [Message us](/contact#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) for a copy.
 - **Correct it.** Ask us, and we'll fix anything that's wrong.
 - **Delete it.** See [Delete your account](/delete-account).
 - **Notifications.** Turn them on or off at any time in your iPhone's Settings.
 
-Depending on where you live, you may have more rights, such as the right to object to or limit how we use your information, or to complain to your local data protection authority. [Message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) to use any of these rights. We'll answer within 30 days and won't treat you differently for asking.
+Depending on where you live, you may have more rights, such as the right to object to or limit how we use your information, or to complain to your local data protection authority. [Message us](/contact#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) to use any of these rights. We'll answer within 30 days and won't treat you differently for asking.
 
 **California residents:** we don't sell your personal information or share it for cross-context behavioral advertising.
 
@@ -104,7 +104,7 @@ Depending on where you live, you may have more rights, such as the right to obje
 
 ## Children
 
-You must be 13 or older to use Cini, and we check your date of birth when you sign up. If we learn that someone under 13 has created an account, we'll delete it. If you think a child under 13 has given us information, [message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com).
+You must be 13 or older to use Cini, and we check your date of birth when you sign up. If we learn that someone under 13 has created an account, we'll delete it. If you think a child under 13 has given us information, [message us](/contact#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com).
 
 ## Security
 
@@ -124,4 +124,4 @@ If we change this policy, we'll update the date at the top. If a change is signi
 
 ## Contact us
 
-[Message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) with any question about your privacy.
+[Message us](/contact#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) with any question about your privacy.

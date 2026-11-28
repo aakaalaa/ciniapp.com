@@ -43,7 +43,7 @@ import { site } from "../site";
     const supportEmail = form.dataset.email || "hello@ciniapp.com";
     let busy = false;
 
-    // The app's Help link opens this page as /support?from=app&app=1.0.3&os=iOS+26.1&device=iPhone16,1&screen=settings
+    // The app's Help link opens /support?from=app&app=1.0.3&os=iOS+26.1&device=iPhone16,1&screen=settings, which forwards to /contact with the same query
     // so messages arrive with the app details. No name, email or account id ever goes in the link.
     const q = new URLSearchParams(location.search);
     const clean = (v: string | null) => (v || "").replace(/[^\w .,()+-]/g, "").trim().slice(0, 40);

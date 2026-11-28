@@ -9,8 +9,8 @@ export const site = {
     "Cini is a movie and TV recommendation app. Pick your mood and get one great pick in seconds, then send it to your TV.",
 
   email: "hello@ciniapp.com", // shown only where the law asks for an email address (Privacy Policy, Terms)
-  // Every other "contact us" on the site points here: the Message us form at the bottom of Support.
-  messageUrl: "/support#message",
+  // Every other "contact us" on the site points here: the Message us form at the bottom of the Contact page.
+  messageUrl: "/contact#message",
   investorEmail: "abimbola@ciniapp.com",
 
   // Leave a link empty ("") to hide that icon. Never ship a dead link.
@@ -58,7 +58,7 @@ export const site = {
 
   // Google Apps Script web app ("Cini waitlist" project, see waitlist-apps-script.gs) that appends to the
   // "Kini Waitlist" Google Sheet. Empty = the form shows an error instead of pretending to save.
-  // The "Message us" box on Support posts here (cloud function submitSupportMessage in Firebase project kini-x).
+  // The "Message us" box on Contact posts here (cloud function submitSupportMessage in Firebase project kini-x).
   // Empty = Send opens the visitor's email app with their message filled in instead.
   supportEndpoint: "https://us-central1-kini-x.cloudfunctions.net/submitSupportMessage",
 
@@ -68,7 +68,7 @@ export const site = {
 export const nav = [
   { href: "/how-it-works", label: "how it works" },
   { href: "/about", label: "about" },
-  { href: "/support", label: "contact" },
+  { href: "/contact", label: "contact" },
 ];
 
 export const legalNav = [
