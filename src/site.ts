@@ -14,9 +14,12 @@ export const site = {
   investorEmail: "abimbola@ciniapp.com",
 
   // Leave a link empty ("") to hide that icon. Never ship a dead link.
+  // Same links as the `socials` collection in Firestore (project kini-x).
   social: {
-    instagram: "https://www.instagram.com/thekiniapp/",
-    linkedin: "https://linkedin.com/company/thekiniapp",
+    instagram: "https://www.instagram.com/getcini",
+    tiktok: "https://www.tiktok.com/@getcini",
+    youtube: "https://www.youtube.com/@getcini",
+    linkedin: "https://www.linkedin.com/company/ciniapp",
   },
 
   // "coming-soon" until the store listings exist. Then add the URLs.
