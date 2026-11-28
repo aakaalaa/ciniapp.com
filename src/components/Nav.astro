@@ -39,7 +39,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   <div class="menu" id="menu" hidden>
     <nav aria-label="Mobile">
       {
-        [{ href: "/", label: "Home" }, ...nav, { href: "/contact", label: "Contact" }].map((l) => (
+        [{ href: "/", label: "Home" }, ...nav].map((l) => (
           <a href={l.href} aria-current={path === l.href ? "page" : undefined}>
             {l.label}
           </a>

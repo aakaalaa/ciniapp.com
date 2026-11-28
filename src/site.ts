@@ -65,7 +65,7 @@ export const site = {
 export const nav = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/about", label: "About" },
-  { href: "/support", label: "Support" },
+  { href: "/support", label: "Contact" },
 ];
 
 export const legalNav = [

@@ -8,9 +8,11 @@ interface Props {
   title: string;
   lede?: string;
   art?: ImageMetadata[];
+  /** A cini buddy on the left, in place of the floating art. `still` is shown to people who asked for less motion. */
+  buddy?: { src: string; still?: string };
   compact?: boolean;
 }
-const { title, lede, art = [], compact = false } = Astro.props;
+const { title, lede, art = [], buddy, compact = false } = Astro.props;
 const spots = [
   { x: "78%", y: "18%", s: 150, r: 10, d: 0.9 },
   { x: "88%", y: "58%", s: 110, r: -12, d: 0.6 },
@@ -20,6 +22,7 @@ const spots = [
 
 <section class:list={["ph", { "ph--compact": compact }]} data-hero>
   {
+    !buddy &&
     art.slice(0, 3).map((img, i) => (
       <div
         class="ph__art"
@@ -31,10 +34,20 @@ const spots = [
       </div>
     ))
   }
-  <div class="wrap ph__inner">
-    <h1 class="ph__title" data-split set:html={title} />
-    {lede && <p class="lede ph__lede" data-reveal>{lede}</p>}
-    <slot />
+  <div class:list={["wrap ph__inner", { "ph__inner--buddy": buddy }]}>
+    {
+      buddy && (
+        <picture class="ph__buddy">
+          {buddy.still && <source media="(prefers-reduced-motion: reduce)" srcset={buddy.still} />}
+          <img src={buddy.src} alt="" width="512" height="512" decoding="async" />
+        </picture>
+      )
+    }
+    <div class="ph__text">
+      <h1 class="ph__title" data-split set:html={title} />
+      {lede && <p class="lede ph__lede" data-reveal>{lede}</p>}
+      <slot />
+    </div>
   </div>
 </section>
 
@@ -51,9 +64,30 @@ const spots = [
 
   .ph__inner {
     position: relative;
+  }
+
+  .ph__text {
     display: grid;
     gap: 24px;
     justify-items: start;
+  }
+
+  .ph__inner--buddy {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 3vw, 44px);
+  }
+
+  .ph__buddy {
+    flex: none;
+    width: clamp(210px, 25vw, 330px);
+    margin: -14px 0 -14px -24px;
+  }
+
+  .ph__buddy img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .ph__title {
@@ -92,6 +126,32 @@ const spots = [
   }
 
   @media (max-width: 900px) {
+    /* Phone: the buddy stays beside the headline; the lede runs full width underneath. */
+    .ph__inner--buddy {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      column-gap: 6px;
+      row-gap: 18px;
+      align-items: center;
+    }
+    .ph__inner--buddy .ph__text {
+      display: contents;
+    }
+    .ph__inner--buddy .ph__title {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: clamp(36px, 10.5vw, 48px);
+    }
+    .ph__inner--buddy .ph__lede {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+    .ph__buddy {
+      grid-column: 1;
+      grid-row: 1;
+      width: 132px;
+      margin: -14px 0 -14px -22px;
+    }
     .ph__art {
       --s: 64px !important;
       opacity: 0.55;
