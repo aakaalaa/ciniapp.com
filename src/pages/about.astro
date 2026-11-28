@@ -6,11 +6,29 @@ import CtaCard from "../components/CtaCard.astro";
 import { site } from "../site";
 
 import founder from "../assets/people/founder.jpg";
-// From the PRD's design principles.
-const values = [
-  { title: "Effortless by default", body: "Every tap should feel quick and obvious. You should never feel stuck or kept waiting." },
-  { title: "Playful and rewarding", body: "Choosing a movie should feel like a game, not homework." },
-  { title: "One decision at a time", body: "One great pick beats a wall of fifty. Cini shows you one title, and you decide." },
+
+// The tedious way to find something to watch, as a flowchart. Black and white on purpose: it is the "before".
+// Icons: Lucide (https://lucide.dev, ISC licence) except scroll, tired and thumbs-down, which are the owner's own images in public/flow/.
+const icons: Record<string, string> = {
+  "screen": "<path d=\"M10 7.75a.75.75 0 0 1 1.142-.638l3.664 2.249a.75.75 0 0 1 0 1.278l-3.664 2.25a.75.75 0 0 1-1.142-.64z\" /> <path d=\"M12 17v4\" /> <path d=\"M8 21h8\" /> <rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\" />",
+  "apps": "<rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\" />",
+  "clap": "<path d=\"M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z\" /> <path d=\"m6.2 5.3 3.1 3.9\" /> <path d=\"m12.4 3.4 3.1 4\" /> <path d=\"M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z\" />",
+  "found": "<path d=\"m8 11 2 2 4-4\" /> <circle cx=\"11\" cy=\"11\" r=\"8\" /> <path d=\"m21 21-4.3-4.3\" />",
+  "pizza": "<path d=\"m12 14-1 1\" /> <path d=\"m13.75 18.25-1.25 1.42\" /> <path d=\"M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12\" /> <path d=\"M18.8 9.3a1 1 0 0 0 2.1 7.7\" /> <path d=\"M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z\" />"
+};
+const steps = [
+  { icon: "screen", text: "you open a streaming app" },
+  { icon: "scroll", text: "you scroll" },
+  { icon: "apps", text: "you open another one" },
+  { icon: "scroll", text: "you scroll" },
+  { icon: "clap", text: "you watch 3 trailers" },
+  { icon: "scroll", text: "you scroll some more" },
+  { icon: "found", text: "you finally find something" },
+];
+const outcomes = [
+  { icon: "pizza", text: "your food is cold" },
+  { icon: "tired", text: "you're too tired to watch" },
+  { icon: "thumbs-down", text: "it wasn't even that good" },
 ];
 ---
 
@@ -20,58 +38,59 @@ const values = [
   description="Cini is an independent app that helps you stop scrolling and start watching. Meet the team and the idea behind it."
 >
   <PageHero
-    title={`Less scrolling. More <span class="accent">watching.</span>`}
-    lede="Cini is a small, independent app with one job: help you find something great to watch, fast."
+    long
+    title="cini is a small, independent app with one job: help you find something great to watch, fast."
   />
 
-  <!-- Story -->
+  <!-- The old way, as a flowchart -->
+  <section class="flow" data-flow>
+    <div class="wrap">
+      <div class="flow__chart">
+        <svg class="flow__svg" aria-hidden="true"></svg>
+        <ol class="flow__grid" aria-label="How finding something to watch usually goes">
+          {
+            steps.map((st, i) => (
+              <li class="flow__step" style={`--i:${i}`}>
+                <span class="flow__ico" aria-hidden="true">
+                  {st.icon in icons ? <svg viewBox="0 0 24 24" set:html={icons[st.icon]} /> : <span class="flow__img" style={`--m:url(/flow/${st.icon}.png)`} />}
+                </span>
+                <span>{st.text}</span>
+              </li>
+            ))
+          }
+          {
+            outcomes.map((o, j) => (
+              <li class="flow__step flow__out" style={`--i:${steps.length + j}`}>
+                <span class="flow__ico" aria-hidden="true">
+                  {o.icon in icons ? <svg viewBox="0 0 24 24" set:html={icons[o.icon]} /> : <span class="flow__img" style={`--m:url(/flow/${o.icon}.png)`} />}
+                </span>
+                <span>{o.text}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our answer -->
   <section class="story">
     <div class="wrap">
       <p class="story__text" data-scrub>
-        You open a streaming app. You scroll. You open another one, watch three trailers, ask everyone in the room, and by the time you
-        pick something you're too tired to watch it.
+        So we built cini around a different question: how do you feel tonight? Tell us, and we'll hand you one great pick that fits
+        your mood, your taste and the services you already pay for.
       </p>
-      <div class="story__cols">
-        <p data-reveal>
-          The problem isn't a lack of things to watch. It's too many choices and not enough help. Movie databases are great for logging
-          what you've already seen. Streaming apps mostly show you what they want you to watch.
-        </p>
-        <p data-reveal>
-          So we built Cini around a different question: how do you feel tonight? Tell us, and we'll hand you one great pick that fits
-          your mood, your taste and the services you already pay for.
-        </p>
-      </div>
     </div>
   </section>
 
-  <!-- Values -->
-  <section class="values">
-    <div class="wrap">
-      <div class="values__head">
-        <p class="eyebrow" data-reveal>What we care about</p>
-        <h2 class="h2" data-split>How we build Cini.</h2>
-      </div>
-      <div class="values__grid">
-        {
-          values.map((v) => (
-            <article class="value" data-reveal data-tilt>
-              <h3>{v.title}</h3>
-              <p>{v.body}</p>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- Founder -->
+<!-- Founder -->
   <section class="founder">
     <div class="wrap">
       <div class="founder__card" data-reveal>
         <div class="founder__photo" data-tilt>
           <Image
             src={founder}
-            alt="Abimbola Akala, founder of Cini"
+            alt="Abimbola Akala, founder of cini"
             widths={[480, 720, 960, 1280, 1600]}
             sizes="(max-width: 760px) calc(100vw - 80px), 480px"
             quality={88}
@@ -84,12 +103,12 @@ const values = [
             that gets what I'm in the mood for and just tells me what to watch.
           </p>
           <p>
-            I'm a product manager by trade, and Cini is built with the same care I'd put into anything I ship, plus a lot of late
+            I'm a product manager by trade, and cini is built with the same care I'd put into anything I ship, plus a lot of late
             nights and a lot of movie nights "for research." I hope it gives you your evenings back.
           </p>
           <p class="founder__sign">
             <strong>Abimbola Akala</strong>
-            <span>Founder</span>
+            <span>founder</span>
           </p>
         </div>
       </div>
@@ -100,12 +119,12 @@ const values = [
   <section class="touch">
     <div class="wrap touch__grid">
       <a class="touch__card" href={site.messageUrl} data-reveal data-cursor="link">
-        <span class="touch__mail">Message us →</span>
+        <span class="touch__mail">message us →</span>
         <span class="touch__sub">Questions, feedback, press and partnerships.</span>
       </a>
       <a class="touch__card" href={site.messageUrl} data-reveal data-cursor="link">
-        <span class="touch__mail">Investors →</span>
-        <span class="touch__sub">Interested in investing in Cini? Send us a message.</span>
+        <span class="touch__mail">investors →</span>
+        <span class="touch__sub">Interested in investing in cini? Send us a message.</span>
       </a>
     </div>
   </section>
@@ -115,60 +134,186 @@ const values = [
 
 <style>
   .story {
-    padding: 10px 0 clamp(80px, 12vh, 140px);
+    padding: clamp(40px, 8vh, 90px) 0 clamp(70px, 11vh, 130px);
   }
 
   .story__text {
     font-family: var(--font-display);
-    font-size: clamp(28px, 4vw, 56px);
-    line-height: 1.18;
-    letter-spacing: -0.035em;
-    max-width: 24ch;
+    font-size: clamp(26px, 3.6vw, 48px);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    max-width: 30ch;
   }
 
-  .story__cols {
+  /* ---- The old way: a black-and-white flowchart. One wave line, one pill on each vertical stroke. No purple on purpose. ---- */
+  .flow {
+    padding: 10px 0 clamp(30px, 6vh, 70px);
+  }
+
+  .flow__chart {
+    position: relative;
+  }
+
+  .flow__svg {
+    display: none;
+  }
+
+  .flow__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    margin-top: 64px;
-    max-width: 980px;
-    color: var(--text-2);
-    font-size: 19px;
+    grid-template-columns: 1fr;
+    gap: 34px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .values {
-    padding: clamp(60px, 10vh, 120px) 0;
-  }
-
-  .values__head {
-    display: grid;
-    gap: 18px;
-    margin-bottom: 48px;
-  }
-
-  .values__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-
-  .value {
-    display: grid;
-    align-content: start;
+  .flow__step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 12px;
-    padding: 30px 26px;
-    border-radius: var(--radius-l);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-    box-shadow: var(--card-shadow);
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: #1d1d21;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.4), 0 20px 36px -20px rgba(0, 0, 0, 0.9);
+    font-family: var(--font-display);
+    font-size: 19px;
+    line-height: 1.2;
+    text-align: center;
+    color: #e8e8ea;
   }
 
-  .value h3 {
-    font-size: 22px;
+  /* The bad results: burgundy, text stays white. */
+  .flow__out {
+    background: #6a1b2d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.4), 0 20px 36px -20px rgba(0, 0, 0, 0.9);
+    color: #fff;
   }
 
-  .value p {
-    color: var(--text-2);
-    font-size: 16px;
+  .flow__ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2a2a2e;
+    color: #e8e8ea;
+  }
+
+  .flow__out .flow__ico {
+    background: rgba(0, 0, 0, 0.28);
+    color: #fff;
+  }
+
+  /* Owner-supplied icons: black shapes with a transparent background, tinted to the text colour. */
+  .flow__img {
+    display: block;
+    width: 28px;
+    height: 28px;
+    background: currentColor;
+    -webkit-mask: var(--m) center / contain no-repeat;
+    mask: var(--m) center / contain no-repeat;
+  }
+
+  .flow__ico svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Phone and tablet: a short line down to the next one. */
+  .flow__step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 2px;
+    height: 34px;
+    background: var(--primary);
+    transform: translateX(-50%);
+  }
+
+  /* Wide screens: the script sets .is-wave and places the pills along the wave. */
+  .flow.is-wave .flow__grid {
+    display: block;
+  }
+
+  .flow.is-wave .flow__step {
+    position: absolute;
+    padding: 6px 14px;
+    font-size: clamp(14px, 1.25vw, 17px);
+    gap: 10px;
+  }
+
+  .flow.is-wave .flow__step::after {
+    display: none;
+  }
+
+  .flow.is-wave .flow__svg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .flow :global(.flow__svg .wave) {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .flow :global(.flow__svg .dot) {
+    fill: var(--primary);
+  }
+
+  /* Plays once when the chart scrolls into view: the line draws along the wave and each pill appears as it arrives. */
+  :global(html.motion) .flow__step {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.45s ease,
+      transform 0.55s var(--ease-out);
+  }
+
+  :global(html.motion) .flow__step.is-in,
+  :global(html.motion) .flow.is-live .flow__step {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(html.motion) .flow.is-live .flow__step {
+    transition-delay: var(--d, calc(var(--i, 0) * 0.45s + 0.2s));
+  }
+
+  :global(html.motion) .flow :global(.flow__svg .wave) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 6s linear 0.2s;
+  }
+
+  :global(html.motion) .flow :global(.flow__svg .dot) {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  :global(html.motion) .flow.is-live :global(.flow__svg .wave) {
+    stroke-dashoffset: 0;
+  }
+
+  :global(html.motion) .flow.is-live :global(.flow__svg .dot) {
+    opacity: 1;
   }
 
   .founder {
@@ -267,15 +412,145 @@ const values = [
   }
 
   @media (max-width: 760px) {
-    .story__cols,
     .founder__card,
-    .touch__grid,
-    .values__grid {
+    .touch__grid {
       grid-template-columns: 1fr;
-    }
-    .story__cols {
-      gap: 18px;
-      margin-top: 40px;
     }
   }
 </style>
+
+<script>
+  // Wide screens: one line runs down, turns, up, turns, down... and each vertical stroke carries one pill (the steps).
+  // After the last stroke it carries on down the right, then runs left along the bottom through the three results.
+  // Narrower screens: a plain top-to-bottom list, each step appearing as you reach it.
+  const flow = document.querySelector<HTMLElement>("[data-flow]");
+  if (flow) {
+    const grid = flow.querySelector<HTMLElement>(".flow__grid")!;
+    const svg = flow.querySelector<SVGSVGElement>(".flow__svg")!;
+    const items = [...grid.children] as HTMLElement[];
+    const steps = items.filter((el) => !el.classList.contains("flow__out"));
+    const outs = items.filter((el) => el.classList.contains("flow__out"));
+    const wide = matchMedia("(min-width: 1100px)");
+    const motion = document.documentElement.classList.contains("motion") && "IntersectionObserver" in window;
+    const NS = "http://www.w3.org/2000/svg";
+    const SPEED = 700; // px of line per second while it draws
+
+    const layout = () => {
+      svg.replaceChildren();
+      if (!wide.matches) {
+        flow.classList.remove("is-wave");
+        grid.style.height = "";
+        items.forEach((el) => el.setAttribute("style", el.dataset.style || ""));
+        return;
+      }
+      flow.classList.add("is-wave");
+      const n = steps.length;
+      const W = grid.parentElement!.clientWidth;
+      const k = 1.6; // pill width as a multiple of the gap between strokes
+      const s = W / (n - 1 + k);
+      const w = k * s;
+      const h = 76;
+      const r = s / 2;
+      const yT = r + 6; // top of every stroke; the top turns arch above it
+      const hi = yT + 18; // pills on strokes that go down
+      const lo = hi + h + 22; // pills on strokes that go up
+      const yB = lo + h + 18; // bottom of every stroke
+      const rh = h; // the result pills are as tall as the wave pills
+      const resTop = yB + r + 30;
+      const yc = resTop + rh / 2; // the line runs through the middle of the results
+      const r2 = 22;
+      const H = resTop + rh + 8;
+      grid.style.height = `${H}px`;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+      const xs = steps.map((_, i) => i * s + w / 2);
+      const xLast = xs[n - 1];
+      const Lleg = yB - yT;
+      const Lturn = Math.PI * r;
+      const legStart = (i: number) => i * (Lleg + Lturn);
+      const afterWave = n * Lleg + (n - 1) * Lturn;
+      const ext = yc - r2 - yB;
+      const horizStart = afterWave + ext + (Math.PI / 2) * r2;
+
+      // results: a row along the bottom, first one nearest the line, reading right to left
+      const pw = w;
+      const gap = s * 0.45;
+      const rightEdge = xLast - r2 - 14;
+      const rights = outs.map((_, j) => rightEdge - j * (pw + gap));
+      const xEnd = rights[outs.length - 1] - pw - 28;
+      const total = horizStart + (xLast - r2 - xEnd);
+      const D = total / SPEED;
+      const delay = (len: number) => `${(0.2 + (len / total) * D).toFixed(2)}s`;
+
+      steps.forEach((el, i) => {
+        const top = i % 2 === 0 ? hi : lo;
+        const reached = i % 2 === 0 ? legStart(i) + (top - yT) : legStart(i) + (yB - (top + h));
+        el.style.cssText = `${el.dataset.style ?? ""}; left:${i * s}px; top:${top}px; width:${w}px; height:${h}px;`;
+        el.style.setProperty("--d", delay(reached));
+      });
+      outs.forEach((el, j) => {
+        const reached = horizStart + (xLast - r2 - rights[j]);
+        el.style.cssText = `${el.dataset.style ?? ""}; left:${rights[j] - pw}px; top:${resTop}px; width:${pw}px; height:${rh}px;`;
+        el.style.setProperty("--d", delay(reached));
+      });
+
+      let d = `M${xs[0]},${yT}`;
+      for (let i = 0; i < n; i++) {
+        const down = i % 2 === 0;
+        d += ` L${xs[i]},${down ? yB : yT}`;
+        if (i < n - 1) {
+          const rr = (xs[i + 1] - xs[i]) / 2;
+          d += ` A${rr},${rr} 0 0 ${down ? 0 : 1} ${xs[i + 1]},${down ? yB : yT}`;
+        }
+      }
+      d += ` L${xLast},${yc - r2} A${r2},${r2} 0 0 1 ${xLast - r2},${yc} L${xEnd},${yc}`;
+
+      const wave = document.createElementNS(NS, "path");
+      wave.setAttribute("d", d);
+      wave.setAttribute("class", "wave");
+      wave.setAttribute("pathLength", "1");
+      wave.style.transitionDuration = `${D.toFixed(2)}s`;
+      const startDot = document.createElementNS(NS, "circle");
+      startDot.setAttribute("cx", String(xs[0]));
+      startDot.setAttribute("cy", String(yT));
+      startDot.setAttribute("r", "4.5");
+      startDot.setAttribute("class", "dot");
+      const endDot = document.createElementNS(NS, "circle");
+      endDot.setAttribute("cx", String(xEnd));
+      endDot.setAttribute("cy", String(yc));
+      endDot.setAttribute("r", "4.5");
+      endDot.setAttribute("class", "dot");
+      endDot.style.transitionDelay = `${(0.2 + D).toFixed(2)}s`;
+      svg.append(wave, startDot, endDot);
+    };
+
+    // Remember each pill's own inline style (its --i), so layout can add and remove its position cleanly.
+    items.forEach((el) => (el.dataset.style = el.getAttribute("style") ?? ""));
+    layout();
+    document.fonts?.ready.then(layout);
+    new ResizeObserver(layout).observe(grid.parentElement!);
+    wide.addEventListener("change", layout);
+
+    if (!motion) {
+      flow.classList.add("is-live");
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            if (wide.matches) {
+              flow.classList.add("is-live");
+              io.disconnect();
+            } else {
+              e.target.classList.add("is-in");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: "0px 0px -10% 0px", threshold: 0.3 },
+      );
+      if (wide.matches) io.observe(flow);
+      else items.forEach((el) => io.observe(el));
+    }
+  }
+</script>

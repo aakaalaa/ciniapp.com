@@ -16,25 +16,25 @@ import sDiscover from "../assets/screens/discover.png";
 // Chapter 01 uses the coded <MoodScreen /> (no screenshot), so it has no `screen`.
 const chapters = [
   {
-    title: "Pick a vibe",
+    title: "pick a vibe",
     body: "Up to two moods, movie or show, then let's roll. No typing, no endless rows.",
     screen: null,
     alt: "",
   },
   {
-    title: "Meet your match",
+    title: "meet your match",
     body: "One title at a time, with IMDb and Letterboxd ratings, cast and a quick synopsis. Skip it, mark it seen, save it or share it.",
     screen: sTitle,
     alt: "A recommended title in Cini with ratings, cast and watch buttons",
   },
   {
-    title: "Play it on your TV",
+    title: "play it on your tv",
     body: "Tap watch to see where it's streaming and send it to your Apple TV with a free Apple Shortcut. Set it up once, then it's one tap.",
     screen: sWatch,
     alt: "Cini's play on TV screen",
   },
   {
-    title: "Keep exploring",
+    title: "keep exploring",
     body: "Browse fresh shelves picked for you, revisit your watchlist, or search by title, actor or theme.",
     screen: sDiscover,
     alt: "Cini Discover page with shelves of titles",
@@ -62,12 +62,12 @@ const appSchema = {
   <section class="hero" data-hero>
     <div class="wrap hero__grid">
       <div class="hero__copy">
-        <p class="eyebrow" data-reveal>Coming soon to iPhone</p>
+        <p class="eyebrow" data-reveal>coming soon to iPhone</p>
         <h1 class="display" data-split>
-          What to watch.<br /><span class="accent">Found.</span>
+          what to watch.<br /><span class="accent">found.</span>
         </h1>
         <p class="lede" data-reveal>
-          Tell Cini how you feel. Get one great movie or show picked just for you, then play it on your TV.
+          Tell cini how you feel. Get one great movie or show picked just for you, then play it on your TV.
         </p>
         <div class="hero__form" data-reveal>
           <WaitlistForm source="hero" />
@@ -86,8 +86,8 @@ const appSchema = {
   <section class="statement" id="statement">
     <div class="wrap">
       <p class="statement__text" data-scrub>
-        Thirty minutes of scrolling. Zero movies watched.
-        <span class="accent">Cini picks. You press play.</span>
+        thirty minutes of scrolling. zero movies watched.
+        <span class="accent">cini picks. you press play.</span>
       </p>
     </div>
   </section>
@@ -132,7 +132,7 @@ const appSchema = {
   <!-- ============ MOOD PLAYGROUND ============ -->
   <section class="play" data-play data-pairs={JSON.stringify(pairs)}>
     <div class="wrap play__inner">
-      <h2 class="h2" data-split>What's the vibe tonight?</h2>
+      <h2 class="h2" data-split>what's the vibe tonight?</h2>
 
       <div class="play__moods" role="group" aria-label="Moods">
         {
@@ -157,7 +157,7 @@ const appSchema = {
 
       <div class="play__result" aria-live="polite">
         <p class="play__line" data-result></p>
-        <a href="#waitlist" class="btn play__go" data-cursor="link" data-magnetic>Let's roll</a>
+        <a href="#waitlist" class="btn play__go" data-cursor="link" data-magnetic>let's roll</a>
       </div>
     </div>
   </section>

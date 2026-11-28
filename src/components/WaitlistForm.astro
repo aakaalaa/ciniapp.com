@@ -11,13 +11,13 @@ const { source = "home" } = Astro.props;
 
 <form class="wl" data-waitlist data-endpoint={site.waitlistEndpoint} data-source={source} novalidate>
   <label class="wl__field">
-    <span class="sr-only">Email address</span>
+    <span class="sr-only">email address</span>
     <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required />
   </label>
   <!-- Honeypot: people never see this, bots fill it in. -->
   <input class="wl__hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
   <button class="btn wl__btn" type="submit" data-cursor="link">
-    <span class="wl__text">Join waitlist</span>
+    <span class="wl__text">join waitlist</span>
     <span class="wl__spin" aria-hidden="true"></span>
     <svg class="wl__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
   </button>
@@ -43,14 +43,14 @@ const { source = "home" } = Astro.props;
       e.preventDefault();
       if (busy) return;
       if (!input.value || !input.checkValidity()) {
-        set("error", "That email doesn't look right.");
+        set("error", "that email doesn't look right.");
         input.focus();
         return;
       }
-      if (hp.value) return set("done", "You're on the list.");
+      if (hp.value) return set("done", "you're on the list.");
       if (!endpoint) {
         console.warn("[waitlist] site.waitlistEndpoint is empty; nothing was saved.");
-        return set("error", "Sign-ups open soon. Message us at ciniapp.com/support to get on the list.");
+        return set("error", "sign-ups open soon. message us at ciniapp.com/support to get on the list.");
       }
       busy = true;
       set("loading");
@@ -68,12 +68,12 @@ const { source = "home" } = Astro.props;
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || data.ok === false) throw new Error(data.error || `HTTP ${res.status}`);
-        set("done", "You're on the list. We'll email you when Cini launches.");
+        set("done", "you're on the list. we'll email you when cini launches.");
         input.value = "";
         form.dispatchEvent(new CustomEvent("waitlist:joined", { bubbles: true }));
       } catch (err) {
         console.warn("[waitlist] failed:", err);
-        set("error", "Something went wrong. Please try again.");
+        set("error", "something went wrong. please try again.");
       } finally {
         busy = false;
       }

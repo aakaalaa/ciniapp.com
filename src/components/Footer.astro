@@ -4,31 +4,31 @@ import { site } from "../site";
 const year = new Date().getFullYear();
 const cols = [
   {
-    title: "Product",
+    title: "product",
     links: [
-      { href: "/how-it-works", label: "How it works" },
-      { href: "/#waitlist", label: "Join the waitlist" },
+      { href: "/how-it-works", label: "how it works" },
+      { href: "/#waitlist", label: "join the waitlist" },
     ],
   },
   {
-    title: "Company",
+    title: "company",
     links: [
-      { href: "/about", label: "About us" },
-      { href: "/contact", label: "Contact" },
+      { href: "/about", label: "about us" },
+      { href: "/contact", label: "contact" },
     ],
   },
   {
-    title: "Help",
+    title: "help",
     links: [
-      { href: "/support", label: "Support & FAQ" },
-      { href: "/delete-account", label: "Delete your account" },
+      { href: "/support", label: "support & faq" },
+      { href: "/delete-account", label: "delete your account" },
     ],
   },
   {
-    title: "Legal",
+    title: "legal",
     links: [
-      { href: "/privacy", label: "Privacy Policy" },
-      { href: "/terms", label: "Terms of Use" },
+      { href: "/privacy", label: "privacy Policy" },
+      { href: "/terms", label: "terms of Use" },
     ],
   },
 ];
@@ -45,8 +45,8 @@ const socials = [
   <div class="wrap">
     <div class="foot__top">
       <div class="foot__hello">
-        <p class="foot__kicker">Questions, ideas, love letters?</p>
-        <a class="foot__mail" href={site.messageUrl} data-cursor="link">Message us →</a>
+        <p class="foot__kicker">questions, ideas, love letters?</p>
+        <a class="foot__mail" href={site.messageUrl} data-cursor="link">message us →</a>
         {
           socials.length > 0 && (
             <ul class="foot__social" aria-label="Cini on social media">
@@ -104,7 +104,7 @@ const socials = [
     </div>
 
     <div class="foot__base">
-      <p>© {year} Cini. All rights reserved.</p>
+      <p>© {year} cini. all rights reserved.</p>
     </div>
   </div>
 </footer>

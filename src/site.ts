@@ -66,14 +66,14 @@ export const site = {
 };
 
 export const nav = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/about", label: "About" },
-  { href: "/support", label: "Contact" },
+  { href: "/how-it-works", label: "how it works" },
+  { href: "/about", label: "about" },
+  { href: "/support", label: "contact" },
 ];
 
 export const legalNav = [
-  { href: "/privacy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
-  { href: "/delete-account", label: "Delete account" },
-  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "privacy" },
+  { href: "/terms", label: "terms" },
+  { href: "/delete-account", label: "delete account" },
+  { href: "/contact", label: "contact" },
 ];

@@ -7,9 +7,9 @@ import { site } from "../../site";
 const { trialDays, monthly, yearly } = site.pro;
 
 const next = [
-  "Open the Cini app. Your plan is switched on within a moment of checkout finishing.",
+  "Open the cini app. Your plan is switched on within a moment of checkout finishing.",
   `Your free trial runs ${trialDays} days. You're charged ${monthly} a month or ${yearly} a year only when it ends.`,
-  "To cancel, go to Profile → Settings → Manage plan before the trial ends. A receipt is emailed to you by Stripe.",
+  "To cancel, go to profile → settings → manage plan before the trial ends. A receipt is emailed to you by Stripe.",
 ];
 ---
 
@@ -19,20 +19,20 @@ const next = [
   noindex
 >
   <PageHero
-    title={`You're <span class="accent">in.</span>`}
-    lede="Thanks for starting your Cini plan. Head back to the app and pick something to watch."
+    title={`you're <span class="accent">in.</span>`}
+    lede="Thanks for starting your cini plan. Head back to the app and pick something to watch."
     compact
   />
 
   <section class="thx">
     <div class="wrap">
       <article class="thx__card" data-reveal>
-        <h2>What happens next</h2>
+        <h2>what happens next</h2>
         <ol>
           {next.map((n, i) => <li><span class="thx__n">{i + 1}</span><span>{n}</span></li>)}
         </ol>
         <p class="thx__help">
-          Not seeing your plan in the app after a few minutes? Close and reopen Cini, then <a href={site.messageUrl}>message us</a> if
+          Not seeing your plan in the app after a few minutes? Close and reopen cini, then <a href={site.messageUrl}>message us</a> if
           it's still missing.
         </p>
       </article>

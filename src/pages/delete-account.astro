@@ -10,9 +10,9 @@ const deleted = [
   "Your profile: name, username, email, phone number, date of birth and profile photo",
   "Your preferences: streaming services, genres and the kinds of stories you like",
   "Your watchlist, seen list and ratings",
-  "Your activity in the app, the taste profile Cini built from it, and your Cini Points and credits",
+  "Your activity in the app, the taste profile cini built from it, and your cini points and credits",
   "Your notification settings and device token",
-  "Messages you've sent to Cini support",
+  "Messages you've sent to cini support",
 ];
 
 const kept = [
@@ -27,8 +27,8 @@ const kept = [
   description="How to delete your Cini account and data, what gets deleted, and how long it takes."
 >
   <PageHero
-    title={`Delete your <span class="accent">account.</span>`}
-    lede="You can delete your Cini account and its data at any time. Here's how, and what happens next."
+    title={`delete your <span class="accent">account.</span>`}
+    lede="You can delete your cini account and its data at any time. Here's how, and what happens next."
     compact
   />
 
@@ -40,9 +40,9 @@ const kept = [
             <article class="del__card" data-reveal>
               <span class="del__n">A</span>
               <div>
-                <h2>In the app</h2>
+                <h2>in the app</h2>
                 <p>
-                  Open Cini, go to <strong>Profile → Settings → Delete account</strong>, and confirm. Your account is deleted straight
+                  Open cini, go to <strong>profile → settings → delete account</strong>, and confirm. Your account is deleted straight
                   away.
                 </p>
               </div>
@@ -52,18 +52,18 @@ const kept = [
         <article class="del__card" data-reveal>
           <span class="del__n">{site.inAppDeletion ? "B" : "1"}</span>
           <div>
-            <h2>{site.inAppDeletion ? "By message" : "Send us a message"}</h2>
+            <h2>{site.inAppDeletion ? "by message" : "send us a message"}</h2>
             <p>
-              <a href={site.messageUrl}>Message us</a> and say <strong>Delete my Cini account</strong>. Use the email address on your
-              account, or include your Cini username and the phone number on your account so we can find it.
+              <a href={site.messageUrl}>Message us</a> and say <strong>delete my cini account</strong>. Use the email address on your
+              account, or include your cini username and the phone number on your account so we can find it.
             </p>
-            <a class="btn" href={site.messageUrl} data-cursor="link" data-magnetic>Request deletion</a>
+            <a class="btn" href={site.messageUrl} data-cursor="link" data-magnetic>request deletion</a>
           </div>
         </article>
         <article class="del__card" data-reveal>
           <span class="del__n">{site.inAppDeletion ? "→" : "2"}</span>
           <div>
-            <h2>We confirm and delete</h2>
+            <h2>we confirm and delete</h2>
             <p>
               We'll check the request came from you, then delete your account and reply to confirm, within 30 days. If we need more
               information to find your account, we'll ask.
@@ -78,16 +78,16 @@ const kept = [
 
       <div class="del__lists">
         <div class="del__list" data-reveal>
-          <h2>What we delete</h2>
+          <h2>what we delete</h2>
           <ul>{deleted.map((d) => <li>{d}</li>)}</ul>
         </div>
         <div class="del__list del__list--kept" data-reveal>
-          <h2>What we may keep</h2>
+          <h2>what we may keep</h2>
           <ul>{kept.map((d) => <li>{d}</li>)}</ul>
         </div>
         <p class="del__more" data-reveal>
           Want a copy of your data first, or to delete only some of it? <a href={site.messageUrl}>Message us</a>. More
-          in our <a href="/privacy">Privacy Policy</a>.
+          in our <a href="/privacy">privacy policy</a>.
         </p>
       </div>
     </div>

@@ -28,10 +28,10 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
       }
     </nav>
 
-    <a href="/#waitlist" class="btn btn--sm nav__cta" data-cursor="link" data-magnetic>Join the waitlist</a>
+    <a href="/#waitlist" class="btn btn--sm nav__cta" data-cursor="link" data-magnetic>join the waitlist</a>
 
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-cursor="link">
-      <span class="sr-only">Menu</span>
+      <span class="sr-only">menu</span>
       <span class="nav__burger" aria-hidden="true"></span>
     </button>
   </div>
@@ -39,14 +39,14 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
   <div class="menu" id="menu" hidden>
     <nav aria-label="Mobile">
       {
-        [{ href: "/", label: "Home" }, ...nav].map((l) => (
+        [{ href: "/", label: "home" }, ...nav].map((l) => (
           <a href={l.href} aria-current={path === l.href ? "page" : undefined}>
             {l.label}
           </a>
         ))
       }
     </nav>
-    <a href="/#waitlist" class="btn">Join the waitlist</a>
+    <a href="/#waitlist" class="btn">join the waitlist</a>
   </div>
 </header>
 
