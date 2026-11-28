@@ -8,7 +8,7 @@ import Base from "../layouts/Base.astro";
 import logo from "../assets/logo.png";
 import { site } from "../site";
 
-const prices = ["$1.99", "$2.99", "$4.99", "$6.99", "$9.99+"];
+const prices = ["$2", "$3", "$5", "$7", "$10"];
 ---
 
 <Base title="you're invited to the beta" description="five quick questions to join the cini beta." noindex bare>
@@ -72,7 +72,7 @@ const prices = ["$1.99", "$2.99", "$4.99", "$6.99", "$9.99+"];
         </div>
 
         <div role="group" class="bx__step" data-step="price">
-          <h2 class="bx__title">the beta is free for 1 year.</h2>
+          <h2 class="bx__title">for helping me test, you get cini <span class="accent">free for a year.</span></h2>
           <p class="bx__lede">cini is expensive to run, so after that, what feels fair a month?</p>
           <div class="bx__chips bx__chips--price" role="radiogroup">
             {prices.map((p) => (
