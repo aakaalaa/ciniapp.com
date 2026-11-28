@@ -1,0 +1,696 @@
+---
+// Closed beta sign-up. Not linked anywhere on the site, kept out of the sitemap and search (noindex): the owner texts this
+// link to people they know. Answers go to the "Beta" tab of the waitlist Google Sheet via the same Apps Script web app
+// (waitlist-apps-script.gs, kind "beta"). Signing up is not access: the owner picks who gets a beta code.
+// The repo is public, so the URL is unlisted, not secret.
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import logo from "../assets/logo.png";
+import { site } from "../site";
+
+const prices = ["$1.99", "$2.99", "$4.99", "$6.99", "$9.99+"];
+---
+
+<Base title="you're invited to the beta" description="five quick questions to join the cini beta." noindex bare>
+  <section class="bx">
+    <form class="bx__card" data-beta data-endpoint={site.waitlistEndpoint} novalidate>
+      <div class="bx__top">
+        <button type="button" class="bx__back" data-back aria-label="back" hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <div class="bx__bar" aria-hidden="true"><span data-bar></span></div>
+      </div>
+
+      <!-- spam trap: people never see or fill this -->
+      <input class="bx__trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div class="bx__steps" aria-live="polite">
+        <div role="group" class="bx__step is-on" data-step="intro">
+          <Image src={logo} alt="" width={96} height={96} class="bx__logo" loading="eager" />
+          <h2 class="bx__title">you're invited to the <span class="accent">cini</span> beta</h2>
+          <button type="button" class="bx__go" data-next>let's go</button>
+        </div>
+
+        <div role="group" class="bx__step" data-step="name">
+          <h2 class="bx__title">what's your name?</h2>
+          <input class="bx__input" name="name" type="text" autocomplete="given-name" autocapitalize="words" maxlength="60" required />
+          <p class="bx__err" data-err></p>
+          <button type="button" class="bx__go" data-next>next</button>
+        </div>
+
+        <div role="group" class="bx__step" data-step="email">
+          <h2 class="bx__title">thanks for being here<span data-hi></span>. what's your email?</h2>
+          <input class="bx__input" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="254" required />
+          <p class="bx__err" data-err></p>
+          <button type="button" class="bx__go" data-next>next</button>
+        </div>
+
+        <div role="group" class="bx__step" data-step="device">
+          <h2 class="bx__title">which phone do you use?</h2>
+          <div class="bx__tiles">
+            <label class="bx__tile">
+              <input type="radio" name="device" value="iOS" data-auto />
+              <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.8" /><path d="M10.5 5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+              <span>iPhone</span>
+            </label>
+            <label class="bx__tile">
+              <input type="radio" name="device" value="Android" data-auto />
+              <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><rect x="5.5" y="2.5" width="13" height="19" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8" /><circle cx="12" cy="18.2" r="1.1" fill="currentColor" /></svg>
+              <span>Android</span>
+            </label>
+          </div>
+          <p class="bx__err" data-err></p>
+        </div>
+
+        <div role="group" class="bx__step" data-step="hardest">
+          <h2 class="bx__title">what's the hardest part of picking something to watch?</h2>
+          <textarea class="bx__input bx__area" name="hardest" rows="4" maxlength="600"></textarea>
+          <div class="bx__row">
+            <button type="button" class="bx__skip" data-skip>skip</button>
+            <button type="button" class="bx__go" data-next>next</button>
+          </div>
+        </div>
+
+        <div role="group" class="bx__step" data-step="price">
+          <h2 class="bx__title">the beta is free for 1 year.</h2>
+          <p class="bx__lede">cini is expensive to run, so after that, what feels fair a month?</p>
+          <div class="bx__chips bx__chips--price" role="radiogroup">
+            {prices.map((p) => (
+              <label class="bx__chip">
+                <input type="radio" name="price" value={p} />
+                <span>{p}</span>
+              </label>
+            ))}
+          </div>
+          <p class="bx__sub">i'd rather pay</p>
+          <div class="bx__chips bx__chips--two" role="radiogroup">
+            <label class="bx__chip"><input type="radio" name="billing" value="monthly" /><span>monthly</span></label>
+            <label class="bx__chip"><input type="radio" name="billing" value="yearly" /><span>yearly, if it's cheaper</span></label>
+          </div>
+          <p class="bx__err" data-err></p>
+          <button type="submit" class="bx__go" data-send>join the beta</button>
+        </div>
+
+        <div role="group" class="bx__step" data-step="done">
+          <img class="bx__buddy" data-buddy data-src="/beta/feel-good.webp" alt="" width="512" height="512" />
+          <div class="bx__over">
+            <h2 class="bx__title">thank you<span data-hi></span>!</h2>
+            <p class="bx__note">we'll email you soon with next steps.</p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-beta]");
+  if (form) {
+    const steps = [...form.querySelectorAll<HTMLElement>(".bx__step")];
+    const bar = form.querySelector<HTMLElement>("[data-bar]")!;
+    const back = form.querySelector<HTMLButtonElement>("[data-back]")!;
+    const send = form.querySelector<HTMLButtonElement>("[data-send]")!;
+    const questions = steps.length - 2; // not counting intro and done
+    let at = 0;
+    let busy = false;
+
+    const val = (name: string) => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | RadioNodeList | null;
+      return el ? String(el.value || "").trim() : "";
+    };
+
+    const err = (msg = "") => {
+      const e = steps[at].querySelector<HTMLElement>("[data-err]");
+      if (e) e.textContent = msg;
+      if (msg) {
+        steps[at].classList.remove("shake");
+        void steps[at].offsetWidth;
+        steps[at].classList.add("shake");
+      }
+    };
+
+    const check = (): string => {
+      const id = steps[at].dataset.step;
+      if (id === "name" && !val("name")) return "what should we call you?";
+      if (id === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("email"))) return "that email doesn't look right.";
+      if (id === "device" && !val("device")) return "pick one.";
+      if (id === "price" && !val("price")) return "pick a price.";
+      if (id === "price" && !val("billing")) return "monthly or yearly?";
+      return "";
+    };
+
+    const go = (to: number) => {
+      if (to === at || to < 0 || to >= steps.length) return;
+      const forward = to > at;
+      const from = steps[at];
+      const next = steps[to];
+      from.classList.remove("is-on", "from-left", "from-right");
+      from.classList.add(forward ? "to-left" : "to-right");
+      next.classList.remove("to-left", "to-right");
+      next.classList.add(forward ? "from-right" : "from-left");
+      void next.offsetWidth; // start the entrance from its offset position
+      next.classList.add("is-on");
+      at = to;
+
+      const id = next.dataset.step;
+      if (id === "price" || id === "done") {
+        const buddy = form.querySelector<HTMLImageElement>("[data-buddy]");
+        if (buddy && !buddy.src) buddy.src = buddy.dataset.src!;
+      }
+      const name = val("name");
+      form.querySelectorAll<HTMLElement>("[data-hi]").forEach((el) => (el.textContent = name ? `, ${name.split(" ")[0]}` : ""));
+      bar.style.width = `${Math.min(100, (Math.max(0, at - 1) / questions) * 100)}%`;
+      if (id === "done") bar.style.width = "100%";
+      form.classList.toggle("is-done", id === "done");
+      back.hidden = at === 0 || id === "done";
+      err();
+      // Focus the first field once the slide has started; don't pop the keyboard on the intro or done screens.
+      const field = next.querySelector<HTMLElement>("input:not([type=radio]), textarea");
+      if (field) setTimeout(() => field.focus({ preventScroll: true }), 260);
+      else {
+        const h = next.querySelector<HTMLElement>("h2");
+        h?.setAttribute("tabindex", "-1");
+        if (at > 0) h?.focus({ preventScroll: true });
+      }
+    };
+
+    const advance = () => {
+      const problem = check();
+      if (problem) return err(problem);
+      go(at + 1);
+    };
+
+    form.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("[data-next]")) advance();
+      if (t.closest("[data-skip]")) {
+        (form.elements.namedItem("hardest") as HTMLTextAreaElement).value = "";
+        go(at + 1);
+      }
+    });
+    back.addEventListener("click", () => go(at - 1));
+
+    // Tapping a phone moves on by itself.
+    form.querySelectorAll<HTMLInputElement>("[data-auto]").forEach((r) =>
+      r.addEventListener("change", () => setTimeout(advance, 320)),
+    );
+    form.querySelectorAll<HTMLInputElement>("input[type=radio]").forEach((r) => r.addEventListener("change", () => err()));
+
+    // Enter moves forward. In the text box Enter is a new line; Cmd/Ctrl+Enter moves on.
+    form.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      const t = e.target as HTMLElement;
+      if (t.tagName === "TEXTAREA" && !(e.metaKey || e.ctrlKey)) return;
+      if (steps[at].dataset.step === "price" || t.tagName === "BUTTON") return;
+      e.preventDefault();
+      advance();
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      const problem = check();
+      if (problem) return err(problem);
+      const endpoint = form.dataset.endpoint;
+      if (!endpoint) return err("sign-ups aren't open yet.");
+
+      busy = true;
+      send.disabled = true;
+      send.textContent = "sending…";
+      try {
+        // text/plain keeps this a "simple" request, so Apps Script needs no CORS preflight.
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            kind: "beta",
+            name: val("name"),
+            email: val("email"),
+            device: val("device"),
+            hardest: val("hardest"),
+            price: val("price"),
+            billing: val("billing"),
+            website: val("website"),
+            page: location.pathname,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || "failed");
+        go(at + 1);
+      } catch (error) {
+        err(String(error).includes("invalid_email") ? "that email doesn't look right." : "that didn't send. try again?");
+      } finally {
+        busy = false;
+        send.disabled = false;
+        send.textContent = "join the beta";
+      }
+    });
+  }
+</script>
+
+<style>
+  .bx {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 24px var(--gutter);
+  }
+
+  .bx__card {
+    position: relative;
+    width: min(100%, 520px);
+    padding: 22px 26px 30px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  .bx__top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 40px;
+  }
+
+  .bx__back {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: -8px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .bx__back[hidden] {
+    display: grid;
+    visibility: hidden;
+  }
+
+  .bx__back:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text);
+  }
+
+  .bx__bar {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+  }
+
+  .bx__bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: #fff;
+    transition: width 0.5s var(--ease-out);
+  }
+
+  .bx__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .bx__steps {
+    display: grid;
+    min-height: 360px;
+  }
+
+  .bx__step {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    min-width: 0;
+    margin: 0;
+    padding: 18px 0 0;
+    border: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(56px);
+    transition:
+      opacity 0.38s var(--ease-out),
+      transform 0.5s var(--ease-out),
+      visibility 0s linear 0.5s;
+  }
+
+  .bx__step.from-left {
+    transform: translateX(-56px);
+  }
+
+  .bx__step.to-left {
+    transform: translateX(-56px) scale(0.98);
+  }
+
+  .bx__step.to-right {
+    transform: translateX(56px) scale(0.98);
+  }
+
+  .bx__step.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.38s var(--ease-out) 0.08s,
+      transform 0.55s var(--ease-out) 0.04s,
+      visibility 0s;
+  }
+
+  .bx__step.from-right:not(.is-on),
+  .bx__step.from-left:not(.is-on) {
+    transition: none;
+  }
+
+  .bx__step.shake {
+    animation: bx-shake 0.4s var(--ease-out);
+  }
+
+  @keyframes bx-shake {
+    20% { transform: translateX(-8px); }
+    45% { transform: translateX(7px); }
+    70% { transform: translateX(-4px); }
+    100% { transform: none; }
+  }
+
+  .bx__step[data-step="intro"],
+  .bx__step[data-step="done"] {
+    align-items: center;
+    text-align: center;
+  }
+
+  .bx__logo {
+    width: 84px;
+    height: 84px;
+    border-radius: 26px;
+  }
+
+  .bx__title {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    font-family: var(--font-display);
+    font-size: clamp(26px, 6.4vw, 32px);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .bx__title:focus {
+    outline: none;
+  }
+
+  .accent {
+    color: var(--primary-2);
+  }
+
+  .bx__note {
+    margin: -6px 0 6px;
+    color: var(--text-2);
+  }
+
+  .bx__lede {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-2);
+  }
+
+  .bx__sub {
+    margin: 4px 0 -6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .bx__input {
+    width: 100%;
+    padding: 18px 22px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    font: inherit;
+    font-size: 19px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .bx__input::placeholder {
+    color: var(--text-3);
+  }
+
+  .bx__input:focus {
+    border-color: var(--primary);
+    background: rgba(156, 136, 255, 0.08);
+  }
+
+  .bx__area {
+    border-radius: 30px;
+    resize: none;
+    line-height: 1.45;
+  }
+
+  .bx__err {
+    min-height: 1.3em;
+    margin: -8px 0 -6px 6px;
+    font-size: 15px;
+    color: var(--pink);
+  }
+
+  .bx__go {
+    align-self: stretch;
+    padding: 18px 26px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-ink);
+    font: inherit;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 0 var(--primary-deep);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  }
+
+  .bx__step[data-step="intro"] .bx__go {
+    width: 100%;
+  }
+
+  .bx__go:hover {
+    transform: translateY(-1px);
+  }
+
+  .bx__go:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--primary-deep);
+  }
+
+  .bx__go:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .bx__row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .bx__row .bx__go {
+    flex: 1;
+  }
+
+  .bx__skip {
+    padding: 0 24px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text-2);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .bx__skip:hover {
+    color: var(--text);
+  }
+
+  .bx__tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .bx__tile,
+  .bx__chip {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .bx__tile input,
+  .bx__chip input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .bx__tile {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: 28px 12px 24px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-2);
+    font-size: 18px;
+    font-weight: 800;
+    transition: transform 0.25s var(--ease-bounce), border-color 0.2s, background 0.2s, color 0.2s;
+  }
+
+  .bx__chips {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .bx__chips--two {
+    grid-template-columns: 1fr 1.4fr;
+  }
+
+  /* five prices: three on the first row, two centred under them */
+  .bx__chips--price {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bx__chips--price .bx__chip {
+    flex: 0 0 calc((100% - 20px) / 3);
+  }
+
+  .bx__chip span {
+    display: grid;
+    place-items: center;
+    min-height: 54px;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-2);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.2;
+    transition: transform 0.25s var(--ease-bounce), border-color 0.2s, background 0.2s, color 0.2s;
+  }
+
+  .bx__tile:hover,
+  .bx__chip:hover span {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .bx__tile:has(input:checked),
+  .bx__chip input:checked + span {
+    border-color: var(--primary);
+    background: rgba(156, 136, 255, 0.16);
+    color: var(--text);
+    transform: scale(1.03);
+  }
+
+  .bx__tile:has(input:focus-visible),
+  .bx__chip input:focus-visible + span {
+    outline: 2px solid var(--primary-2);
+    outline-offset: 3px;
+  }
+
+  /* Thank-you screen: the animation as it is, filling the card. Its own backdrop colour (rgb 225 220 243) becomes the card colour. */
+  .bx__card.is-done {
+    padding: 0;
+    background: rgb(225, 220, 243);
+    box-shadow: var(--card-shadow);
+  }
+
+  .bx__card.is-done .bx__top {
+    display: none;
+  }
+
+  .bx__step[data-step="done"] {
+    position: relative;
+    display: block;
+    padding: 0;
+  }
+
+  .bx__buddy {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 118px;
+  }
+
+  .bx__over {
+    position: absolute;
+    inset: 36px 20px auto;
+    display: grid;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .bx__over .bx__title {
+    color: #1c1b22;
+  }
+
+  .bx__over .bx__note {
+    margin: 0;
+    color: #4d4a5c;
+    font-weight: 600;
+  }
+
+  .bx__step[data-step="done"].is-on .bx__buddy {
+    animation: bx-fade 0.6s ease 0.1s both;
+  }
+
+  @keyframes bx-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 480px) {
+    .bx {
+      align-items: start;
+      padding-top: 16px;
+    }
+
+    .bx__card {
+      padding: 18px 20px 24px;
+      border-radius: 34px;
+    }
+
+
+    .bx__chips--two {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bx__step,
+    .bx__step.is-on {
+      transform: none !important;
+      transition: opacity 0.2s, visibility 0s;
+    }
+  }
+</style>

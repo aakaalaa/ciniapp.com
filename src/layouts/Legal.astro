@@ -4,7 +4,7 @@ import Base from "./Base.astro";
 import { site } from "../site";
 
 interface Props {
-  frontmatter: { title: string; description: string; summary?: string };
+  frontmatter: { title: string; description: string; summary?: string; updated?: string };
   headings: { depth: number; slug: string; text: string }[];
 }
 const { frontmatter, headings = [] } = Astro.props;
@@ -16,7 +16,7 @@ const toc = headings.filter((h) => h.depth === 2);
     <div class="wrap">
       <header class="lg__head">
         <h1 class="lg__title" data-split>{frontmatter.title}</h1>
-        <p class="lg__date" data-reveal>Last updated {site.legal.lastUpdated}</p>
+        <p class="lg__date" data-reveal>Last updated {frontmatter.updated ?? site.legal.lastUpdated}</p>
         {frontmatter.summary && <p class="lg__summary" data-reveal set:html={frontmatter.summary} />}
       </header>
 

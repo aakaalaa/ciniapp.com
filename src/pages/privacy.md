@@ -2,6 +2,7 @@
 layout: ../layouts/Legal.astro
 title: Privacy Policy
 description: What Cini collects, why, who we share it with, and the choices you have.
+updated: November 27, 2026
 summary: "<strong>The short version:</strong> Cini uses what you tell it and what you do in the app to recommend things to watch. We don't sell your data, we don't show ads, and we don't track you across other apps or websites. You can get a copy of your data or delete it at any time."
 ---
 
@@ -34,6 +35,7 @@ If you have a question about this policy or your data, [message us](/support#mes
 | Activity in the app | Moods you pick, titles you save, mark as seen, skip, rate or share, and searches you run | To recommend titles and improve your picks over time |
 | Messages to us | Anything you send to hello@ciniapp.com or through the message form on ciniapp.com, and the email address you give us. If you message us from the app, we also receive your app version, device model, iOS version and the screen you were on. | To answer you and fix problems |
 | Waitlist sign-ups | Your email, if you join the waitlist on ciniapp.com | To tell you when Cini launches |
+| Beta sign-ups | If you're invited to the beta: your name, email, which kind of phone you use, and your answers about picking what to watch and what you'd pay | To choose beta testers, send you access, and shape Cini and its price |
 
 ### Information created as you use Cini
 
@@ -85,6 +87,8 @@ Support messages are kept for up to two years so we can follow up on problems, t
 
 Waitlist emails are kept until Cini launches and we've emailed you, or until you ask us to remove yours.
 
+Beta sign-ups are kept until the beta ends, or until you ask us to remove yours.
+
 ## Your choices and rights
 
 - **See or copy your data.** [Message us](/support#message) or email [hello@ciniapp.com](mailto:hello@ciniapp.com) for a copy.
@@ -112,7 +116,7 @@ Cini and its service providers store and process information in the United State
 
 ## Our website
 
-ciniapp.com doesn't use cookies, ads or analytics, and it loads nothing from other companies. If you join the waitlist, your email is stored in a Google Sheet we control. The site is hosted by GitHub, which may keep server logs such as IP addresses for security.
+ciniapp.com doesn't use cookies, ads or analytics, and it loads nothing from other companies. If you join the waitlist or sign up for the beta, what you send is stored in a Google Sheet we control. The site is hosted by GitHub, which may keep server logs such as IP addresses for security.
 
 ## Changes to this policy
 

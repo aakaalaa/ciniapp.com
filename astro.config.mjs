@@ -5,7 +5,8 @@ export default defineConfig({
   site: "https://ciniapp.com",
   trailingSlash: "ignore",
   build: { format: "directory" },
-  // /pro and /pro/thanks are only reached from the app (Stripe return pages) and are noindex, so keep them out of the sitemap.
-  integrations: [sitemap({ filter: (page) => !/\/pro(\/|$)/.test(new URL(page).pathname) })],
+  // Keep unlisted, noindex pages out of the sitemap: /pro and /pro/thanks (Stripe return pages, reached from the app),
+  // /invite (friend invite links) and the closed-beta sign-up (/beta-…, only sent to people directly).
+  integrations: [sitemap({ filter: (page) => !/^\/(pro|invite|beta-[^/]+)(\/|$)/.test(new URL(page).pathname) })],
   devToolbar: { enabled: false },
 });
