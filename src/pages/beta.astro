@@ -97,6 +97,7 @@ const prices = ["$2", "$3", "$5", "$7", "$10"];
             <h2 class="bx__title">thank you<span data-hi></span>!</h2>
             <p class="bx__note">we'll email you soon with next steps.</p>
           </div>
+          <a class="bx__site" href="/"><span>ciniapp.com</span></a>
         </div>
       </div>
     </form>
@@ -162,6 +163,7 @@ const prices = ["$2", "$3", "$5", "$7", "$10"];
       bar.style.width = `${Math.min(100, (Math.max(0, at - 1) / questions) * 100)}%`;
       if (id === "done") bar.style.width = "100%";
       form.classList.toggle("is-done", id === "done");
+      if (id === "done") setTimeout(() => (location.href = "/"), 5000); // on to ciniapp.com
       back.hidden = at === 0 || id === "done";
       err();
       // Focus the first field once the slide has started; don't pop the keyboard on the intro or done screens.
@@ -632,7 +634,46 @@ const prices = ["$2", "$3", "$5", "$7", "$10"];
   .bx__step[data-step="done"] {
     position: relative;
     display: block;
-    padding: 0;
+    padding: 0 0 84px;
+  }
+
+  /* The ciniapp.com button. A darker fill sweeps across it for the five seconds before the page moves on. */
+  .bx__site {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    overflow: hidden;
+    padding: 15px 34px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-ink);
+    font-size: 18px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 5px 0 var(--primary-deep);
+    white-space: nowrap;
+  }
+
+  .bx__site span {
+    position: relative;
+  }
+
+  .bx__site::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .bx__card.is-done .bx__site::before {
+    animation: bx-count 5s linear forwards;
+  }
+
+  @keyframes bx-count {
+    to { transform: scaleX(1); }
   }
 
   .bx__buddy {

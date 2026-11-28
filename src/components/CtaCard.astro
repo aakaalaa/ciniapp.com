@@ -1,7 +1,5 @@
 ---
-import { Image } from "astro:assets";
 import WaitlistForm from "./WaitlistForm.astro";
-import reel from "../assets/3d/reel.png";
 
 interface Props {
   source: string;
@@ -20,7 +18,7 @@ const {
 <section class="cta" id={id}>
   <div class="wrap">
     <div class="cta__card" data-reveal>
-      <Image src={reel} alt="" width={420} class="cta__reel" data-spin />
+      <img class="cta__crowd" src="/cta/crowd.webp" alt="" width="512" height="512" loading="lazy" decoding="async" />
       <h2 class="h2">{title}</h2>
       {lede && <p class="lede">{lede}</p>}
       <WaitlistForm source={source} />
@@ -44,9 +42,8 @@ const {
     border-radius: 40px;
     text-align: center;
     overflow: hidden;
-    background:
-      radial-gradient(80% 90% at 50% 0%, rgba(156, 136, 255, 0.35), transparent 70%),
-      var(--surface);
+    /* The animation's own backdrop colour (crowd.webp is rgb 224 216 238), so the card and the picture are one surface. */
+    background: rgb(224, 216, 238);
     box-shadow: var(--card-shadow);
   }
 
@@ -54,18 +51,51 @@ const {
     max-width: 18ch;
     font-size: clamp(24px, 2.9vw, 40px);
     margin-bottom: 8px;
+    color: #1c1b22;
   }
 
   .cta__card .lede {
     margin-bottom: 12px;
     text-align: center;
+    color: #4d4a5c;
   }
 
-  .cta__reel {
-    width: 104px;
+  .cta__crowd {
+    display: block;
+    width: clamp(230px, 36vw, 330px);
     height: auto;
-    margin-bottom: 6px;
-    filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.5));
+    margin: -22px 0 -14px;
+  }
+
+  /* The form on a light card: white field, no outline, dark text, readable messages. */
+  .cta__card :global(.wl .wl__field input) {
+    border: 0;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 22px -10px rgba(60, 40, 120, 0.45);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: #1c1b22;
+  }
+
+  .cta__card :global(.wl .wl__field input::placeholder) {
+    color: #7a7788;
+  }
+
+  .cta__card :global(.wl .wl__field input:focus) {
+    background: #fff;
+    box-shadow: 0 0 0 2px var(--primary), 0 8px 22px -10px rgba(60, 40, 120, 0.45);
+  }
+
+  .cta__card :global(.wl .wl__msg) {
+    color: #4d4a5c;
+  }
+
+  .cta__card :global(.wl[data-state="error"] .wl__msg) {
+    color: #b3263f;
+  }
+
+  .cta__card :global(.wl[data-state="done"] .wl__msg) {
+    color: #1f7a45;
   }
 
   @media (max-width: 600px) {
